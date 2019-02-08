@@ -13,6 +13,7 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/menu_txt_date"
+            android:background="@drawable/text_bg2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/str_date"
@@ -20,6 +21,7 @@
 
         <TextView
             android:id="@+id/menu_txt_temp"
+            android:background="@drawable/text_bg2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/str_Temperature"
@@ -59,10 +61,10 @@
 
         <Button
             android:id="@+id/menu_btn_return"
+            style="style=@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            style="style=@style/Widget.AppCompat.Button"
             android:text="@string/str_return" />
 
     </LinearLayout>
