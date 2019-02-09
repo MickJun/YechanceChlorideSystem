@@ -25,12 +25,20 @@
                 android:text="@string/str_scan" />
 
             <Button
-                android:id="@+id/main_btn_connect"
+            android:id="@+id/main_btn_connect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="style=@style/Widget.AppCompat.Button"
+            android:text="@string/str_connect" />
+
+            <Button
+                android:id="@+id/main_btn_test"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_connect" />
+                android:text="@string/str_back" />
 
 
         </LinearLayout>

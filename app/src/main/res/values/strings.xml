@@ -10,7 +10,14 @@
     <string name="str_measurement">量測</string>
     <string name="str_load_delete_data">讀取/刪除資料</string>
     <string name="str_system_set_up">系統設定</string>
+    <string name="str_print">列印</string>
+    <string name="str_title">主題</string>
     <string name="str_date">日期</string>
     <string name="str_temperature">溫度</string>
-    <string name="str_print">列印</string>
+    <string name="str_water_volume">水量</string>
+    <string name="str_fine_aggregate">細粒料</string>
+    <string name="str_chloride_measurement">氯離子</string>
+    <string name="str_concrete_chloride_content">混泥土氯離子含量</string>
+    <string name="str_temp">暫存</string>
+
 </resources>

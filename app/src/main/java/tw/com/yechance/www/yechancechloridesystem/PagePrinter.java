@@ -1,49 +1,61 @@
 package tw.com.yechance.www.yechancechloridesystem;
 
-import android.annotation.SuppressLint;
-import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothProfile;
-import android.bluetooth.BluetoothSocket;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
-import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Set;
-import java.util.UUID;
 
 import woyou.aidlservice.jiuiv5.ICallback;
 import woyou.aidlservice.jiuiv5.IWoyouService;
 
 public class PagePrinter extends AppCompatActivity  implements View.OnClickListener{
 
-    WebView mWebView;
 
 
     private IWoyouService woyouService;
-    private IWoyouService woyouService2;
 
     private Button btn_Print_Print;
     private Button btn_Print_Return;
-    @SuppressLint("SetJavaScriptEnabled")
-    @Override
+
+    private TextView  txt_title;
+    private TextView  txt_date;
+    private TextView  txt_temperature;
+
+    private TextView  txt_1;
+    private TextView  txt_2;
+    private TextView  txt_3;
+    private TextView  txt_4;
+
+    private String str_print_1,str_print_2,str_print_3,str_print_4;
+
+//    public void Update_Status(String str_Temp1, String str_Temp2,String str_Temp3,String str_Temp4) {
+//        str_print_1 = str_Temp1;
+//        str_print_2 = str_Temp2;
+//        str_print_3 = str_Temp3;
+//        str_print_4 = str_Temp4;
+//    }
+//    private final Handler handler = new Handler();
+//    private final Runnable runnable = new Runnable() {
+//        public void run() {
+//            txt_1.setText(str_print_1);
+//            txt_2.setText(str_print_2);
+//            txt_3.setText(str_print_3);
+//            txt_4.setText(str_print_4);
+//            handler.postDelayed(this,500);
+//        }
+//    };
+
+            @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_printer);
@@ -64,7 +76,40 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             btn_Print_Return = this.findViewById(R.id.print_btn_return);
             btn_Print_Return.setOnClickListener(this);
         }
+        if(txt_title == null){
+            txt_title = this.findViewById(R.id.print_txt_title);
+        }
+        if(txt_date == null){
+            txt_date = this.findViewById(R.id.print_txt_date);
+        }
+        if(txt_temperature == null){
+            txt_temperature = this.findViewById(R.id.print_txt_temp);
+        }
+        if(txt_1 == null){
+            txt_1 = this.findViewById(R.id.print_txt_1);
+        }
+        if(txt_2 == null){
+            txt_2 = this.findViewById(R.id.print_txt_2);
+        }
+        if(txt_3 == null){
+            txt_3 = this.findViewById(R.id.print_txt_3);
+        }
+        if(txt_4 == null){
+            txt_4 = this.findViewById(R.id.print_txt_4);
+        }
 
+        //handler.postDelayed(this.runnable,500);
+
+        //取的intent中的bundle物件
+        Bundle bundle =this.getIntent().getExtras();
+        str_print_1 = bundle.getString("txt_1");;
+        str_print_2 = bundle.getString("txt_2");;
+        str_print_3 = bundle.getString("txt_3");;
+        str_print_4 = bundle.getString("txt_4");;
+        txt_1.setText(str_print_1);
+        txt_2.setText(str_print_2);
+        txt_3.setText(str_print_3);
+        txt_4.setText(str_print_4);
 
         Intent intent_P = new Intent();
         intent_P.setPackage("woyou.aidlservice.jiuiv5");
@@ -87,11 +132,22 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
 
 
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.print_btn_print:
                 try{
-                    woyouService.printTextWithFont("商⽶\n","",36,callback);
+                    woyouService.printTextWithFont("*****" + txt_title.getText().toString() + "*****\n","",36,callback);
+                    woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",36,callback);
+                    woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",36,callback);
+                    woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",36,callback);
+                    woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",36,callback);
+                    woyouService.printTextWithFont(txt_3.getText().toString()  +"\n","",36,callback);
+                    woyouService.printTextWithFont(txt_4.getText().toString() +"\n","",36,callback);
+                    woyouService.printTextWithFont("*********************\n","",36,callback);
+                    woyouService.printTextWithFont("signature\n","",36,callback);
+                    woyouService.printTextWithFont("\n","",36,callback);
+                    woyouService.printTextWithFont("\n","",36,callback);
+                    woyouService.printTextWithFont("\n","",36,callback);
+                    woyouService.printTextWithFont("*********************\n","",36,callback);
                     woyouService.printTextWithFont("\n","",36,callback);
                     woyouService.printTextWithFont("\n","",36,callback);
                 }catch (RemoteException e) {

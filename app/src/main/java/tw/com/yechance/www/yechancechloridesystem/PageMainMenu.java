@@ -2,17 +2,30 @@ package tw.com.yechance.www.yechancechloridesystem;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class PageMainMenu extends AppCompatActivity implements View.OnClickListener{
 
+    public MainActivity mainActivity;
+//
+//    public void setMainActivity(MainActivity mainActivity) {
+//        this.mainActivity = mainActivity;
+//    }
 
+    public BluetoothSocket mBTSocket;
+//
+//    public void setBluetoothSocket(BluetoothSocket theBTSocket) {
+//        this.mBTSocket = theBTSocket;
+//    }
 
     private Button btn_menu_calibration;
     private Button btn_menu_measurement;
@@ -53,7 +66,8 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
             btn_menu_return = this.findViewById(R.id.menu_btn_return);
             btn_menu_return.setOnClickListener(this);
         }
-
+        mBTSocket =  ((MickTest) getApplication()).getGlobalBlueSocket();
+        mainActivity = ((MickTest) getApplication()).getMainActivity();
     }
 
     @Override
@@ -62,14 +76,24 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
         //((MainActivity)this.getApplicationContext()).onDestroy();
         super.onDestroy();
     }
-
+    private byte[] output_Final = {0x0a,0x0f,0x0b};
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.menu_btn_calibration:
-                Intent intent_C = new Intent();
-                intent_C.setClass(PageMainMenu.this, PageCalibration.class);
-                startActivity(intent_C);
+//                Intent intent_C = new Intent();
+//                intent_C.setClass(PageMainMenu.this, PageCalibration.class);
+//                startActivity(intent_C);
+                mainActivity.sendMessage();
+
+//                try {
+//                    OutputStream os = mBTSocket.getOutputStream();
+//                    os.write(output_Final);
+//                    os.flush();
+//                    //show("客户端:发送信息成功");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 break;
             case R.id.menu_btn_measurement:
                 Intent intent_M = new Intent();
@@ -85,6 +109,15 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
                 Intent intent_S = new Intent();
                 //intent_S.setClass(PageMainMenu.this, PageSystemSetUp.class);
                 intent_S.setClass(PageMainMenu.this, PagePrinter.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle = new Bundle();
+                bundle.putString("txt_1", "1234");
+                bundle.putString("txt_2", "ABCD");
+                bundle.putString("txt_3", "OOXX");
+                bundle.putString("txt_4", "MMMM");
+                //將Bundle物件assign給intent
+                intent_S.putExtras(bundle);
+
                 startActivity(intent_S);
                 break;
             case R.id.menu_btn_return:

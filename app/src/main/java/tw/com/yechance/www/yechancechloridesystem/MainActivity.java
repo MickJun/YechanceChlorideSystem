@@ -1,5 +1,6 @@
 package tw.com.yechance.www.yechancechloridesystem;
 
+import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
@@ -29,7 +30,6 @@ import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-
     //Bluetooth
     private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int BT_Select_Point = 0;
     public BluetoothHeadset mBluetoothHeadset;
     public BluetoothSocket BTSocket;
-    public BluetoothSocket PTSocket;
 
 
     private ListView Main_ListView ;
@@ -172,33 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Toast.makeText(getApplicationContext(), "連線失敗 " ,	Toast.LENGTH_SHORT).show();
             str_temp = str_temp + "BT連線失敗";
         }
-//        //printer
-//        BluetoothDevice connPrinter = mBluetoothAdapter.getRemoteDevice("00:11:22:33:44:55");
-//        try {
-//            PTSocket = connPrinter.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-//            PTSocket.connect();
-//            PTreadThread mPTReadThread = new PTreadThread();
-//            mPTReadThread.start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if(PTSocket.isConnected()){
-//            str_temp = str_temp + "PT連線成功";
-//            byte[] Output_Final = {0x1d,0x56,0x42,0x00};
-//            try {
-//                OutputStream os = PTSocket.getOutputStream();
-//                os.write(Output_Final);
-//                os.flush();
-//                //show("客户端:发送信息成功");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//        }
-//        else{
-//            str_temp = str_temp + "PT連線失敗";
-//        }
         Toast.makeText(getApplicationContext(), str_temp,	Toast.LENGTH_SHORT).show();
 
 
@@ -206,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button btn_Main_Scan;
     private Button btn_Main_Connect;
+    private Button btn_Main_test;
     //public ButtonListener BtnListener = new ButtonListener();
 
     @Override
@@ -228,13 +201,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_Main_Connect = this.findViewById(R.id.main_btn_connect);
             btn_Main_Connect.setOnClickListener(this);
         }
+        if(btn_Main_test == null) {
+            btn_Main_test = this.findViewById(R.id.main_btn_test);
+            btn_Main_test.setOnClickListener(this);
+        }
         if(Main_TextView == null){
             Main_TextView = this.findViewById(R.id.main_txt_select);
         }
         if(Main_ListView == null){
             Main_ListView = this.findViewById(R.id.main_list_bt);
         }
-
 
     }
 
@@ -247,9 +223,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             try {
                 BTSocket.close();
-                if(BTSocket != null && BTSocket.isConnected() ){
-                    PTSocket.close();
-                }
                 mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET,mBluetoothHeadset);
                 unregisterReceiver(mReceiver);
             } catch (IOException e) {
@@ -266,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //unregisterReceiver(mReceiver);
     }
 
+    private MickTest myApplication = (MickTest) getApplication();
+    private byte[] output_Final = {0x0a,0x0f,0x0b};
 
     public void onClick(View v) {
 
@@ -273,14 +248,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_btn_scan:
                 BT_Scan();
                 break;
+            case R.id.main_btn_test:
+                if (BTSocket == null) {
+                    Toast.makeText(this, "没有连接", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                try {
+                    OutputStream os = BTSocket.getOutputStream();
+                    os.write(output_Final);
+                    os.flush();
+                    //show("客户端:发送信息成功");
+                    ((MickTest) getApplication()).setGlobalBlueSocket(BTSocket);
+                    ((MickTest) getApplication()).setMainActivity(this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                //myapp.setMainActivity(MainActivity.this);
+//                //new一個Bundle物件，並將要傳遞的資料傳入
+//                Bundle bundle = new Bundle();
+//                bundle.putString("txt_1", "1234");
+//                bundle.putString("txt_2", "ABCD");
+//                bundle.putString("txt_3", "OOXX");
+//                bundle.putString("txt_4", "MMMM");
+//                //將Bundle物件assign給intent
+//                intent.putExtras(bundle);
+
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, PageMainMenu.class);
+                startActivity(intent);
+
+                break;
             case R.id.main_btn_connect:
                 if(BTSocket != null && BTSocket.isConnected() )
                 {
                     try {
                         BTSocket.close();
-                        if(BTSocket != null && BTSocket.isConnected() ){
-                            PTSocket.close();
-                        }
                         mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET,mBluetoothHeadset);
                         btn_Main_Connect.setText("連線");
                     } catch (IOException e) {
@@ -290,19 +294,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else
                 {
                     BT_Connecting();
-                    Intent intent = new Intent();
-                    intent.setClass(MainActivity.this, PageMainMenu.class);
-                    startActivity(intent);
                     //MainActivity.this.finish();
                 }
 
                 break;
         }
     }
-//    class ButtonListener implements View.OnClickListener{
-//
-//
-//    }
+
+    public void sendMessage() {
+        if (BTSocket == null) {
+            Toast.makeText(this, "没有连接", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            OutputStream os = BTSocket.getOutputStream();
+            os.write(output_Final);
+            os.flush();
+            //show("客户端:发送信息成功");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    byte[] Get_buff = new byte[1024];
+
+    public byte[] readMessage() {
+        return Get_buff;
+    }
 
     public class readThread extends Thread {
 
@@ -320,8 +337,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 while (true) {
                     try{
                         if ((bytes = is.read(buffer)) > 0) {
-                            byte[] buf_data = new byte[bytes];
-                            System.arraycopy(buffer,0,buf_data,0,bytes-1);
+                            //byte[] buf_data = new byte[bytes];
+                            System.arraycopy(buffer,0,Get_buff,0,bytes-1);
 //                            for (int i = 0; i < bytes; i++) {
 //                                buf_data[i] = buffer[i];
 //                            }
@@ -340,45 +357,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
-    public class PTreadThread extends Thread {
-
-        public void run() {
-            int bytes;
-            InputStream is = null;
-            try {
-                is = PTSocket.getInputStream();
-                //show("客户端:获得输入流");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            if(is != null){
-                byte[] buffer = new byte[1024];
-                while (true) {
-                    try{
-                        if ((bytes = is.read(buffer)) > 0) {
-                            byte[] buf_data = new byte[bytes];
-                            System.arraycopy(buffer,0,buf_data,0,bytes-1);
-//                            for (int i = 0; i < bytes; i++) {
-//                                buf_data[i] = buffer[i];
-//                            }
-                        }
-                    } catch (IOException e) {
-
-                        try {
-                            is.close();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        break;
-                    }
-                }
-            }
-
-        }
-    }
-
-
 
 }
-
