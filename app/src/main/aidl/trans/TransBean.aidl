@@ -1,3 +1,0 @@
-package trans;
-
-parcelable TransBean;

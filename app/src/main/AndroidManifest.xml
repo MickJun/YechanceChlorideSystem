@@ -3,7 +3,6 @@
     package="tw.com.yechance.www.yechancechloridesystem">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,7 +14,8 @@
         android:roundIcon="@mipmap/yechance_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PagePrinter"/>
+
+        <activity android:name=".PagePrinter" />
         <activity android:name=".PageSystemSetUp" />
         <activity android:name=".PageLoadDeleteData" />
         <activity android:name=".PageMeasurement" />

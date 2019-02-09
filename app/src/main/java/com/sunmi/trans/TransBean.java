@@ -1,4 +1,4 @@
-package trans;
+package com.sunmi.trans;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -80,7 +80,7 @@ public class TransBean implements Parcelable {
 		}
 	}
 	
-	public static Parcelable.Creator<TransBean> CREATOR = new Parcelable.Creator<TransBean>(){
+	public static Creator<TransBean> CREATOR = new Creator<TransBean>(){
 
 		@Override
 		public TransBean createFromParcel(Parcel source) {

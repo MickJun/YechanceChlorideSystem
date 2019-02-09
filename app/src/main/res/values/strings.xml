@@ -11,5 +11,6 @@
     <string name="str_load_delete_data">讀取/刪除資料</string>
     <string name="str_system_set_up">系統設定</string>
     <string name="str_date">日期</string>
-    <string name="str_Temperature">溫度</string>
+    <string name="str_temperature">溫度</string>
+    <string name="str_print">列印</string>
 </resources>

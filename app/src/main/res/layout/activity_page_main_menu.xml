@@ -24,7 +24,7 @@
             android:background="@drawable/text_bg2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/str_Temperature"
+            android:text="@string/str_temperature"
             android:textSize="30sp" />
 
         <Button

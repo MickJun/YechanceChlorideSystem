@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int BT_Select_Point = 0;
     public BluetoothHeadset mBluetoothHeadset;
     public BluetoothSocket BTSocket;
+    public BluetoothSocket PTSocket;
 
 
     private ListView Main_ListView ;
@@ -121,7 +123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (BluetoothDevice device : pairedDevices) {
                     String deviceName = device.getName();
                     String deviceHardwareAddress = device.getAddress(); // MAC address
-                    if(deviceName != "InnerPrinter") {
+                    if(deviceName != "InnerPrinter")
+                    {
                         BT_Devicelist.add(deviceName); //this adds an element to the list.
                         BT_Addrlist.add(deviceHardwareAddress);
                     }
@@ -149,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void BT_Connecting(){
-
+        String str_temp = "";
         if(mBluetoothAdapter.isDiscovering())mBluetoothAdapter.cancelDiscovery();
-        BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice(BT_Addrlist.get(BT_Select_Point));
+        BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice(BT_Addrlist.get(BT_Select_Point));//"00:11:22:33:44:55"
         try {
             BTSocket = connDevices.createRfcommSocketToServiceRecord(MY_UUID);
             BTSocket.connect();
@@ -162,11 +165,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(BTSocket.isConnected()){
             btn_Main_Connect.setText("中斷連線");
-            Toast.makeText(getApplicationContext(), "連線成功 " ,	Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "連線成功 " ,	Toast.LENGTH_SHORT).show();
+            str_temp = str_temp + "BT連線成功";
         }
         else{
-            Toast.makeText(getApplicationContext(), "連線失敗 " ,	Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "連線失敗 " ,	Toast.LENGTH_SHORT).show();
+            str_temp = str_temp + "BT連線失敗";
         }
+//        //printer
+//        BluetoothDevice connPrinter = mBluetoothAdapter.getRemoteDevice("00:11:22:33:44:55");
+//        try {
+//            PTSocket = connPrinter.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+//            PTSocket.connect();
+//            PTreadThread mPTReadThread = new PTreadThread();
+//            mPTReadThread.start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if(PTSocket.isConnected()){
+//            str_temp = str_temp + "PT連線成功";
+//            byte[] Output_Final = {0x1d,0x56,0x42,0x00};
+//            try {
+//                OutputStream os = PTSocket.getOutputStream();
+//                os.write(Output_Final);
+//                os.flush();
+//                //show("客户端:发送信息成功");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+//        else{
+//            str_temp = str_temp + "PT連線失敗";
+//        }
+        Toast.makeText(getApplicationContext(), str_temp,	Toast.LENGTH_SHORT).show();
+
+
     }
 
     private Button btn_Main_Scan;
@@ -212,6 +247,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             try {
                 BTSocket.close();
+                if(BTSocket != null && BTSocket.isConnected() ){
+                    PTSocket.close();
+                }
                 mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET,mBluetoothHeadset);
                 unregisterReceiver(mReceiver);
             } catch (IOException e) {
@@ -240,13 +278,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     try {
                         BTSocket.close();
+                        if(BTSocket != null && BTSocket.isConnected() ){
+                            PTSocket.close();
+                        }
                         mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET,mBluetoothHeadset);
                         btn_Main_Connect.setText("連線");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
                 }
                 else
                 {
@@ -272,6 +311,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             InputStream is = null;
             try {
                 is = BTSocket.getInputStream();
+                //show("客户端:获得输入流");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if(is != null){
+                byte[] buffer = new byte[1024];
+                while (true) {
+                    try{
+                        if ((bytes = is.read(buffer)) > 0) {
+                            byte[] buf_data = new byte[bytes];
+                            System.arraycopy(buffer,0,buf_data,0,bytes-1);
+//                            for (int i = 0; i < bytes; i++) {
+//                                buf_data[i] = buffer[i];
+//                            }
+                        }
+                    } catch (IOException e) {
+
+                        try {
+                            is.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+
+    public class PTreadThread extends Thread {
+
+        public void run() {
+            int bytes;
+            InputStream is = null;
+            try {
+                is = PTSocket.getInputStream();
                 //show("客户端:获得输入流");
             } catch (IOException e1) {
                 e1.printStackTrace();
