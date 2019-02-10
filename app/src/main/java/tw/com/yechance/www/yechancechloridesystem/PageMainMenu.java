@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
     private Button btn_menu_load_delete_data;
     private Button btn_menu_system_set_up;
     private Button btn_menu_return;
+
+    private TextView txt_menu_date;
+    private TextView txt_menu_temperature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +70,13 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
             btn_menu_return = this.findViewById(R.id.menu_btn_return);
             btn_menu_return.setOnClickListener(this);
         }
-        mBTSocket =  ((MickTest) getApplication()).getGlobalBlueSocket();
+
+        if(txt_menu_date == null){
+            txt_menu_date = this.findViewById(R.id.menu_txt_date);
+        }
+        if(txt_menu_temperature == null){
+            txt_menu_temperature = this.findViewById(R.id.menu_txt_temp);
+        }
         mainActivity = ((MickTest) getApplication()).getMainActivity();
     }
 
@@ -84,16 +94,8 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
 //                Intent intent_C = new Intent();
 //                intent_C.setClass(PageMainMenu.this, PageCalibration.class);
 //                startActivity(intent_C);
-                mainActivity.sendMessage();
-
-//                try {
-//                    OutputStream os = mBTSocket.getOutputStream();
-//                    os.write(output_Final);
-//                    os.flush();
-//                    //show("客户端:发送信息成功");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                int Inn1 = mainActivity.readMessage(0);
+                txt_menu_temperature.setText(Integer.toString(Inn1));
                 break;
             case R.id.menu_btn_measurement:
                 Intent intent_M = new Intent();

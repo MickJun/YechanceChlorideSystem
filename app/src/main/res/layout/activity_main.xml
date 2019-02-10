@@ -33,12 +33,12 @@
             android:text="@string/str_connect" />
 
             <Button
-                android:id="@+id/main_btn_test"
+                android:id="@+id/main_btn_start"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_back" />
+                android:text="@string/str_start" />
 
 
         </LinearLayout>

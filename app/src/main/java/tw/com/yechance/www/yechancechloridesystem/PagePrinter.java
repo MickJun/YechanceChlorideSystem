@@ -44,16 +44,8 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
 //        str_print_3 = str_Temp3;
 //        str_print_4 = str_Temp4;
 //    }
-//    private final Handler handler = new Handler();
-//    private final Runnable runnable = new Runnable() {
-//        public void run() {
-//            txt_1.setText(str_print_1);
-//            txt_2.setText(str_print_2);
-//            txt_3.setText(str_print_3);
-//            txt_4.setText(str_print_4);
-//            handler.postDelayed(this,500);
-//        }
-//    };
+
+
 
             @Override
     protected void onCreate(Bundle savedInstanceState) {
