@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             // Establish connection to the proxy.
             mBluetoothAdapter.getProfileProxy(MainActivity.this, mProfileListener, BluetoothProfile.HEADSET);
-
+            btn_Main_Connect.setEnabled(true);
         }
     }
 
@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(btn_Main_Connect == null) {
             btn_Main_Connect = this.findViewById(R.id.main_btn_connect);
             btn_Main_Connect.setOnClickListener(this);
+            btn_Main_Connect.setEnabled(false);
         }
         if(btn_Main_start == null) {
             btn_Main_start = this.findViewById(R.id.main_btn_start);

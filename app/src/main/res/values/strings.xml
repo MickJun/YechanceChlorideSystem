@@ -3,7 +3,7 @@
     <string name="str_connect">連線</string>
     <string name="str_disconnect">中斷連線</string>
     <string name="str_scan">搜尋藍芽</string>
-    <string name="str_bt_name">Bluetooth Device Name</string>
+    <string name="str_bt_first">請先搜尋藍芽</string>
     <string name="str_back">Back</string>
     <string name="str_return">返回</string>
     <string name="str_calibration">校正</string>
