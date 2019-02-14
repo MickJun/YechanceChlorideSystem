@@ -6,4 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".PageCalibration">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/calibration_txt_title"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_title"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/calibration_txt_date"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_date"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/calibration_txt_temp"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_temperature"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/calibration_txt_1"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_temp"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/calibration_txt_2"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_temp"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/calibration_txt_3"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_temp"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/calibration_txt_4"
+            android:background="@drawable/text_bg2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/str_temp"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/calibration_btn_start"
+            style="style=@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/str_start" />
+        <Button
+            android:id="@+id/calibration_btn_return"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="style=@style/Widget.AppCompat.Button"
+            android:text="@string/str_return" />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
