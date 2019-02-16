@@ -91,11 +91,12 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.menu_btn_calibration:
-//                Intent intent_C = new Intent();
-//                intent_C.setClass(PageMainMenu.this, PageCalibration.class);
-//                startActivity(intent_C);
                 int Inn1 = mainActivity.readMessage(0);
                 txt_menu_temperature.setText(Integer.toString(Inn1));
+
+                Intent intent_C = new Intent();
+                intent_C.setClass(PageMainMenu.this, PageCalibration.class);
+                startActivity(intent_C);
                 break;
             case R.id.menu_btn_measurement:
                 Intent intent_M = new Intent();
@@ -113,10 +114,10 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
                 intent_S.setClass(PageMainMenu.this, PagePrinter.class);
                 //new一個Bundle物件，並將要傳遞的資料傳入
                 Bundle bundle = new Bundle();
-                bundle.putString("txt_1", "1234");
-                bundle.putString("txt_2", "ABCD");
-                bundle.putString("txt_3", "OOXX");
-                bundle.putString("txt_4", "MMMM");
+                bundle.putString("txt_1", "Data");
+                bundle.putString("txt_2", "From");
+                bundle.putString("txt_3", "Menu");
+                bundle.putString("txt_4", "Page");
                 //將Bundle物件assign給intent
                 intent_S.putExtras(bundle);
 

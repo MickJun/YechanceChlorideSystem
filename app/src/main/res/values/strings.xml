@@ -20,5 +20,8 @@
     <string name="str_concrete_chloride_content">混泥土氯離子含量</string>
     <string name="str_temp">暫存</string>
     <string name="str_start">開始</string>
+    <string name="str_select_data">選擇資料</string>
+    <string name="str_load">載入</string>
+    <string name="str_delete">刪除</string>
 
 </resources>

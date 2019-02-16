@@ -405,8 +405,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 ttTemp[0] = 0;
             }
-            if (BTSocket != null){sendMessage(ttTemp);}
-            handler.postDelayed(this,200);
+            if (BTSocket != null && BTSocket.isConnected()){sendMessage(ttTemp);}
+            handler.postDelayed(this,1000);
         }
     };
 

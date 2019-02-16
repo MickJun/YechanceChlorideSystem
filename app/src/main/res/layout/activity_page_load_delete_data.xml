@@ -17,28 +17,28 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/data_btn_scan"
+                android:id="@+id/data_btn_return"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_scan" />
+                android:text="@string/str_return" />
 
             <Button
-                android:id="@+id/data_btn_connect"
+                android:id="@+id/data_btn_load"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_connect" />
+                android:text="@string/str_load" />
 
             <Button
-                android:id="@+id/data_btn_start"
+                android:id="@+id/data_btn_delete"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_start" />
+                android:text="@string/str_delete" />
 
 
         </LinearLayout>
@@ -58,12 +58,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:background="@drawable/text_bg2"
-                    android:text="@string/str_bt_first"
+                    android:text="@string/str_select_data"
                     android:textSize="30sp" />
             </LinearLayout>
 
             <ListView
-                android:id="@+id/data_list_bt"
+                android:id="@+id/data_list_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
