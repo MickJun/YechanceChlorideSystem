@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chloride System</string>
+    <string name="app_name">氯離子檢測系統</string>
     <string name="str_connect">連線</string>
     <string name="str_disconnect">中斷連線</string>
     <string name="str_scan">搜尋藍芽</string>

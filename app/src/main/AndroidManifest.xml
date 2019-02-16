@@ -13,7 +13,7 @@
         android:name=".MickTest"
         android:allowBackup="true"
         android:icon="@mipmap/yechance_logo_round"
-        android:label="@style/AppTheme"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/yechance_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
