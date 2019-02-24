@@ -11,37 +11,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/menu_txt_date"
-            android:background="@drawable/text_bg2"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="@string/str_date"
-            android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/menu_txt_temp"
-            android:background="@drawable/text_bg2"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="@string/str_temperature"
-            android:textSize="30sp" />
 
         <Button
-            android:id="@+id/menu_btn_calibration"
+            android:id="@+id/menu_btn_calibration_0D1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_calibration" />
+            android:text="@string/str_calibration0D1" />
+
+
 
         <Button
-            android:id="@+id/menu_btn_measurement"
+            android:id="@+id/menu_btn_calibration_0D5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_measurement" />
+            android:text="@string/str_calibration0D5" />
+
+
+        <Button
+            android:id="@+id/menu_btn_measurement_CC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="style=@style/Widget.AppCompat.Button"
+            android:text="@string/str_measurement_concrete_chloride" />
+        <Button
+            android:id="@+id/menu_btn_measurement_FAC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="style=@style/Widget.AppCompat.Button"
+            android:text="@string/str_measurement_fine_aggregate_chloride" />
+        <Button
+            android:id="@+id/menu_btn_measurement_WC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="style=@style/Widget.AppCompat.Button"
+            android:text="@string/str_measurement_water_chloride" />
 
         <Button
             android:id="@+id/menu_btn_load_delete_data"
@@ -51,13 +62,6 @@
             style="style=@style/Widget.AppCompat.Button"
             android:text="@string/str_load_delete_data" />
 
-        <Button
-            android:id="@+id/menu_btn_system_set_up"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_system_set_up" />
 
         <Button
             android:id="@+id/menu_btn_return"

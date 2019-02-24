@@ -2,6 +2,7 @@ package tw.com.yechance.www.yechancechloridesystem;
 
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,17 +22,23 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
     private TextView data_TextView ;
 
     @Override
+    public void onRestart() {
+        super.onRestart();  // Always call the superclass method first
+        hideBottomUIMenu();
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_load_delete_data);
 
         if(this.getSupportActionBar() != null) {
             this.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            this.getSupportActionBar().setLogo(R.drawable.yechance_logo_s);
+            this.getSupportActionBar().setLogo(R.drawable.yechance_logo2_s);
             this.getSupportActionBar().setDisplayUseLogoEnabled(true);
             this.getSupportActionBar().setDisplayShowTitleEnabled(false);
             this.getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.title_backcolor));
         }
+        hideBottomUIMenu();
         if(btn_data_return == null) {
             btn_data_return = this.findViewById(R.id.data_btn_return);
             btn_data_return.setOnClickListener(this);
@@ -80,5 +87,22 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
                 finish();
                 break;
         }
+    }
+    /**
+     * 隐藏虚拟按键，并且全屏
+     */
+    protected void hideBottomUIMenu() {
+        //隱藏虛擬按鍵，並且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
     }
 }

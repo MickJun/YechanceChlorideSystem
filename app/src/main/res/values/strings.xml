@@ -8,12 +8,13 @@
     <string name="str_return">返回</string>
     <string name="str_calibration">校正</string>
     <string name="str_measurement">量測</string>
-    <string name="str_load_delete_data">讀取/刪除資料</string>
+    <string name="str_load_delete_data">資料查詢</string>
     <string name="str_system_set_up">系統設定</string>
     <string name="str_print">列印</string>
+    <string name="str_save_print">儲存並列印</string>
     <string name="str_title">主題</string>
     <string name="str_date">日期</string>
-    <string name="str_temperature">溫度</string>
+    <string name="str_temperature">溫度：</string>
     <string name="str_water_volume">水量</string>
     <string name="str_fine_aggregate">細粒料</string>
     <string name="str_chloride_measurement">氯離子</string>
@@ -23,5 +24,28 @@
     <string name="str_select_data">選擇資料</string>
     <string name="str_load">載入</string>
     <string name="str_delete">刪除</string>
+    <string name="str_calibration0D1">0.1%標準液校正</string>
+    <string name="str_calibration0D5">0.5%標準液校正</string>
+    <string name="str_measurement_concrete_chloride">混凝土氯離子含量測定</string>
+    <string name="str_measurement_fine_aggregate_chloride">細粒料氯離子含量測定</string>
+    <string name="str_measurement_water_chloride">水溶液氯離子含量測定</string>
+    <string name="str_start_calibration">開始校正</string>
+    <string name="str_end_calibration">結束校正</string>
+    <string name="str_start_test">開始測試</string>
+    <string name="str_end_test">結束測試</string>
+    <string name="str_device_read">目前參數：</string>
+    <string name="str_timer">剩餘時間</string>
+    <string name="str_sure">確認儲存</string>
+    <string name="str_re_calibration">重新校正</string>
+    <string name="str_re_test">重新測試</string>
+    <string name="str_water_unit">單位用水量：</string>
+    <string name="str_water_cl">水溶液Cl含量：</string>
+    <string name="str_CC_summarize">混凝土氯離子總量：</string>
+    <string name="str_water_rate">含水率：</string>
+    <string name="str_FAC_summarize">細粒料氯離子總量：</string>
+    <string name="str_unit_kgm3">(kg/m^3)</string>
+    <string name="str_unit_tmpeC">(℃)</string>
+    <string name="str_unit_percentage">(%)</string>
+    <string name="str_unit_second">秒</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,21 +23,25 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
 //        this.mainActivity = mainActivity;
 //    }
 
-    public BluetoothSocket mBTSocket;
+//    public BluetoothSocket mBTSocket;
 //
 //    public void setBluetoothSocket(BluetoothSocket theBTSocket) {
 //        this.mBTSocket = theBTSocket;
 //    }
 
-    private Button btn_menu_calibration;
-    private Button btn_menu_measurement;
+    private Button btn_menu_calibration0D1;
+    private Button btn_menu_calibration0D5;
+    private Button btn_menu_measurement_CC;
+    private Button btn_menu_measurement_FAC;
+    private Button btn_menu_measurement_WC;
     private Button btn_menu_load_delete_data;
-    private Button btn_menu_system_set_up;
     private Button btn_menu_return;
 
-    private TextView txt_menu_date;
-    private TextView txt_menu_temperature;
-
+    @Override
+    public void onRestart() {
+        super.onRestart();  // Always call the superclass method first
+        hideBottomUIMenu();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,38 +49,40 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
 
         if(this.getSupportActionBar() != null) {
             this.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            this.getSupportActionBar().setLogo(R.drawable.yechance_logo_s);
+            this.getSupportActionBar().setLogo(R.drawable.yechance_logo2_s);
             this.getSupportActionBar().setDisplayUseLogoEnabled(true);
             this.getSupportActionBar().setDisplayShowTitleEnabled(false);
             this.getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.title_backcolor));
         }
+        hideBottomUIMenu();
 
-        if(btn_menu_calibration == null) {
-            btn_menu_calibration = this.findViewById(R.id.menu_btn_calibration);
-            btn_menu_calibration.setOnClickListener(this);
+        if(btn_menu_calibration0D1 == null) {
+            btn_menu_calibration0D1 = this.findViewById(R.id.menu_btn_calibration_0D1);
+            btn_menu_calibration0D1.setOnClickListener(this);
         }
-        if(btn_menu_measurement == null) {
-            btn_menu_measurement = this.findViewById(R.id.menu_btn_measurement);
-            btn_menu_measurement.setOnClickListener(this);
+        if(btn_menu_calibration0D5 == null) {
+            btn_menu_calibration0D5 = this.findViewById(R.id.menu_btn_calibration_0D5);
+            btn_menu_calibration0D5.setOnClickListener(this);
+        }
+        if(btn_menu_measurement_CC == null) {
+            btn_menu_measurement_CC = this.findViewById(R.id.menu_btn_measurement_CC);
+            btn_menu_measurement_CC.setOnClickListener(this);
+        }
+        if(btn_menu_measurement_FAC == null) {
+            btn_menu_measurement_FAC = this.findViewById(R.id.menu_btn_measurement_FAC);
+            btn_menu_measurement_FAC.setOnClickListener(this);
+        }
+        if(btn_menu_measurement_WC == null) {
+            btn_menu_measurement_WC = this.findViewById(R.id.menu_btn_measurement_WC);
+            btn_menu_measurement_WC.setOnClickListener(this);
         }
         if(btn_menu_load_delete_data == null) {
             btn_menu_load_delete_data = this.findViewById(R.id.menu_btn_load_delete_data);
             btn_menu_load_delete_data.setOnClickListener(this);
         }
-        if(btn_menu_system_set_up == null) {
-            btn_menu_system_set_up = this.findViewById(R.id.menu_btn_system_set_up);
-            btn_menu_system_set_up.setOnClickListener(this);
-        }
         if(btn_menu_return == null) {
             btn_menu_return = this.findViewById(R.id.menu_btn_return);
             btn_menu_return.setOnClickListener(this);
-        }
-
-        if(txt_menu_date == null){
-            txt_menu_date = this.findViewById(R.id.menu_txt_date);
-        }
-        if(txt_menu_temperature == null){
-            txt_menu_temperature = this.findViewById(R.id.menu_txt_temp);
         }
         mainActivity = ((MickTest) getApplication()).getMainActivity();
     }
@@ -90,42 +97,89 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.menu_btn_calibration:
-                int Inn1 = mainActivity.readMessage(0);
-                txt_menu_temperature.setText(Integer.toString(Inn1));
-
-                Intent intent_C = new Intent();
-                intent_C.setClass(PageMainMenu.this, PageCalibration.class);
-                startActivity(intent_C);
+            case R.id.menu_btn_calibration_0D1:
+                Intent intent_0D1 = new Intent();
+                intent_0D1.setClass(PageMainMenu.this, PageCalibration.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_0D1 = new Bundle();
+                bundle_0D1.putString("title", "C_0D1");
+                //將Bundle物件assign給intent
+                intent_0D1.putExtras(bundle_0D1);
+                startActivity(intent_0D1);
                 break;
-            case R.id.menu_btn_measurement:
-                Intent intent_M = new Intent();
-                intent_M.setClass(PageMainMenu.this, PageMeasurement.class);
-                startActivity(intent_M);
+            case R.id.menu_btn_calibration_0D5:
+                Intent intent_0D5 = new Intent();
+                intent_0D5.setClass(PageMainMenu.this, PageCalibration.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_0D5 = new Bundle();
+                bundle_0D5.putString("title", "C_0D5");
+                //將Bundle物件assign給intent
+                intent_0D5.putExtras(bundle_0D5);
+                startActivity(intent_0D5);
+                break;
+            case R.id.menu_btn_measurement_CC:
+                Intent intent_CC = new Intent();
+                intent_CC.setClass(PageMainMenu.this, PageMeasurement.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_CC = new Bundle();
+                bundle_CC.putString("title", "M_CC");
+                //將Bundle物件assign給intent
+                intent_CC.putExtras(bundle_CC);
+                startActivity(intent_CC);
+                break;
+            case R.id.menu_btn_measurement_FAC:
+                Intent intent_FAC = new Intent();
+                //intent_S.setClass(PageMainMenu.this, PageSystemSetUp.class);
+                intent_FAC.setClass(PageMainMenu.this, PageMeasurement.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_FAC = new Bundle();
+                bundle_FAC.putString("title", "M_FAC");
+                //將Bundle物件assign給intent
+                intent_FAC.putExtras(bundle_FAC);
+                startActivity(intent_FAC);
+                break;
+
+            case R.id.menu_btn_measurement_WC:
+                Intent intent_WC = new Intent();
+                intent_WC.setClass(PageMainMenu.this, PageMeasurement.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_WC = new Bundle();
+                bundle_WC.putString("title", "M_WC");
+                //將Bundle物件assign給intent
+                intent_WC.putExtras(bundle_WC);
+                startActivity(intent_WC);
                 break;
             case R.id.menu_btn_load_delete_data:
-                Intent intent_L = new Intent();
-                intent_L.setClass(PageMainMenu.this, PageLoadDeleteData.class);
-                startActivity(intent_L);
-                break;
-            case R.id.menu_btn_system_set_up:
-                Intent intent_S = new Intent();
-                //intent_S.setClass(PageMainMenu.this, PageSystemSetUp.class);
-                intent_S.setClass(PageMainMenu.this, PagePrinter.class);
+                Intent intent_LDD = new Intent();
+                intent_LDD.setClass(PageMainMenu.this, PageLoadDeleteData.class);
                 //new一個Bundle物件，並將要傳遞的資料傳入
-                Bundle bundle = new Bundle();
-                bundle.putString("txt_1", "Data");
-                bundle.putString("txt_2", "From");
-                bundle.putString("txt_3", "Menu");
-                bundle.putString("txt_4", "Page");
+                Bundle bundle_LDD = new Bundle();
+                bundle_LDD.putString("title", "M_WC");
                 //將Bundle物件assign給intent
-                intent_S.putExtras(bundle);
-
-                startActivity(intent_S);
+                intent_LDD.putExtras(bundle_LDD);
+                startActivity(intent_LDD);
                 break;
+
             case R.id.menu_btn_return:
                 PageMainMenu.this.finish();
                 break;
         }
+    }
+    /**
+     * 隐藏虚拟按键，并且全屏
+     */
+    protected void hideBottomUIMenu() {
+        //隱藏虛擬按鍵，並且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
     }
 }

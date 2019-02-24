@@ -10,10 +10,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -184,17 +186,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //public ButtonListener BtnListener = new ButtonListener();
 
     @Override
+    public void onRestart() {
+        super.onRestart();  // Always call the superclass method first
+        hideBottomUIMenu();
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         if(this.getSupportActionBar() != null) {
             this.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            this.getSupportActionBar().setLogo(R.drawable.yechance_logo_s);
+            this.getSupportActionBar().setLogo(R.drawable.yechance_logo2_s);
             this.getSupportActionBar().setDisplayUseLogoEnabled(true);
             this.getSupportActionBar().setDisplayShowTitleEnabled(false);
             this.getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.title_backcolor));
         }
+        hideBottomUIMenu();
+
         if(btn_Main_Scan == null) {
             btn_Main_Scan = this.findViewById(R.id.main_btn_scan);
             btn_Main_Scan.setOnClickListener(this);
@@ -302,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     byte[] Get_buff = new byte[1024];
     String Read_Str = "", Read_One = "",Read_INT = "";
-    public int readMessage(int Index_I) {
+    public int readADC(int Index_I) {
         int tempX;
         switch (Index_I){
             case 0 :
@@ -410,4 +419,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    /**
+     * 隐藏虚拟按键，并且全屏
+     */
+    protected void hideBottomUIMenu() {
+        //隱藏虛擬按鍵，並且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
+    }
 }

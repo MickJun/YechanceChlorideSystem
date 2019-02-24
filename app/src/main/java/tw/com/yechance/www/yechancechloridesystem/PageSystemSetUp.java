@@ -16,7 +16,7 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
 
         if(this.getSupportActionBar() != null) {
             this.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            this.getSupportActionBar().setLogo(R.drawable.yechance_logo_s);
+            this.getSupportActionBar().setLogo(R.drawable.yechance_logo2_s);
             this.getSupportActionBar().setDisplayUseLogoEnabled(true);
             this.getSupportActionBar().setDisplayShowTitleEnabled(false);
             this.getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.title_backcolor));
