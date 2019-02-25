@@ -234,10 +234,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //if(handler != null)handler.removeMessages(0);
         if(BTSocket != null && BTSocket.isConnected())
         {
+            unregisterReceiver(mReceiver);
             try {
                 BTSocket.close();
                 mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET,mBluetoothHeadset);
-                unregisterReceiver(mReceiver);
             } catch (IOException e) {
                 e.printStackTrace();
             }
