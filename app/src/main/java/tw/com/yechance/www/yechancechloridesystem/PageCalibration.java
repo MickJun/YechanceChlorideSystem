@@ -2,17 +2,20 @@ package tw.com.yechance.www.yechancechloridesystem;
 
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class PageCalibration extends AppCompatActivity  implements View.OnClickListener{
 
@@ -32,6 +35,24 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
 
     private String  Get_title,Get_Str_tmpeture, Get_Str_Sensor,Str_for_Temp;
     private int     Get_Int_Tmpeture, Get_Int_Sensor;
+
+
+    //取得內部儲存體擺放檔案的目錄
+    //預設擺放目錄為 /data/data/[package.name]/file
+    File dir = null;
+    //String datafilename = "data.txt";
+    String settingfilename = "setting.txt";
+    String Sdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
+                        {"21","17874.4","21","10474.58"}
+    };
+
+    File exDataFile = null;
+
+    private String[][] File_Save_Array;
+    private String[] File_Read_Row_Array;
+
+    private  int Calibration_count = 120,Calibration_Start_Flag = 0;
+
 
     @Override
     public void onRestart() {
@@ -87,9 +108,24 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         mainActivity = ((MickTest) getApplication()).getMainActivity();
 
 
-        Get_Int_Tmpeture = mainActivity.readADC(1);
-        Get_Str_tmpeture = Integer.toString(Get_Int_Tmpeture);
-        txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmpeture + getResources().getText(R.string.str_unit_tmpeC).toString() );
+        dir = this.getExternalFilesDir(null);
+        //開啟或建立該目錄底下的檔案
+        exDataFile = new File(dir, settingfilename);
+
+        //讀取 /data/data/com.myapp/test.txt 檔案內容
+        File_Read_Row_Array = readFromFiletoArray(exDataFile);
+        File_Save_Array = DataArrayfomat(File_Read_Row_Array);
+        if(File_Save_Array[0][0].equals("")){
+            writeToFile(exDataFile, Sdata,Sdata.length,4);
+            File_Read_Row_Array = readFromFiletoArray(exDataFile);
+            File_Save_Array = DataArrayfomat(File_Read_Row_Array);
+        }
+
+
+        handler.postDelayed(this.runnable,1000);
+        Calibration_count = 120;
+        txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
+
         //取的intent中的bundle物件
         Bundle bundle =this.getIntent().getExtras();
         Get_title = bundle.getString("title");
@@ -97,17 +133,21 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         {
             txt_calib_title.setText(R.string.str_calibration0D1);
             txt_calib_title.setTextColor(getResources().getColor(R.color.red));
+            txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+            txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
         }
         else if(Get_title.equals("C_0D5"))
         {
             txt_calib_title.setText(R.string.str_calibration0D5);
             txt_calib_title.setTextColor(getResources().getColor(R.color.red));
+            txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+            txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
         }
-        txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + "120" + getResources().getText(R.string.str_unit_second).toString());
 
-        Get_Int_Sensor = mainActivity.readADC(0);
-        Get_Str_Sensor = Integer.toString(Get_Int_Sensor);
-        txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + Get_Str_Sensor + getResources().getText(R.string.str_unit_percentage).toString() );
+
+
+
+
 
     }
 
@@ -116,51 +156,69 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         switch (v.getId()) {
             case R.id.calibration_btn_start:
 
+                if(Calibration_Start_Flag == 0)
+                {
+                    Calibration_count = 120;
+                    Calibration_Start_Flag = 1;
+                }
+                else
+                {
+                    Calibration_count = 0;
+                    Calibration_Start_Flag = 0;
+                    txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
+                    btn_calib_start.setEnabled(false);
+                }
 
-//                int Inn1 = mainActivity.readMessage(0);
-//                txt_calib_1.setText(Integer.toString(Inn1));
-//
-//                Inn1 = mainActivity.readMessage(1);
-//                txt_calib_2.setText(Integer.toString(Inn1));
-//
-//                //取得內部儲存體擺放檔案的目錄
-//                //預設擺放目錄為 /data/data/[package.name]/file
-//                File dir = this.getExternalFilesDir(null);
-//                String filename = "test.txt";
-//
-//                //開啟或建立該目錄底下檔名為 "test.txt" 的檔案
-//                File inFile = new File(dir, filename);
-//
-//                //讀取 /data/data/com.myapp/test.txt 檔案內容
-//                String data = readFromFile(inFile);
-//                txt_calib_3.setText(data);
-//                //將檔案存放在 getExternalFilesDir() 目錄
-//                if (isExtStorageWritable()){
-//                    File outFile = new File(dir, filename);
-//                    writeToFile(outFile, "Hello! calibration");
-//                }
-//                txt_calib_4.setText("Hello! calibration");
 
 
                 break;
 
             case R.id.calibration_btn_sure:
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, PageMainMenu.class);
-//                startActivity(intent);
-                finish();
+                if(Get_title.equals("C_0D1"))
+                {
+                    File_Save_Array[1][0] = Get_Str_tmpeture;
+                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    File_Save_Array[1][1] = Get_Str_Sensor;
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
+                }
+                else if(Get_title.equals("C_0D5"))
+                {
+                    File_Save_Array[1][2] = Get_Str_tmpeture;
+                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    File_Save_Array[1][3] = Get_Str_Sensor;
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
+                }
+                writeToFile(exDataFile, File_Save_Array,File_Save_Array.length,4);
+                Toast.makeText(getApplicationContext(), "儲存完成",	Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.calibration_btn_re_calibration:
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, PageMainMenu.class);
-//                startActivity(intent);
-                finish();
+                Calibration_Start_Flag = 0;
+                Calibration_count = 120;
+                txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
+                btn_calib_start.setEnabled(true);
+
+                //讀取 /data/data/com.myapp/test.txt 檔案內容
+                File_Read_Row_Array = readFromFiletoArray(exDataFile);
+                File_Save_Array = DataArrayfomat(File_Read_Row_Array);
+
+                if(Get_title.equals("C_0D1"))
+                {
+                    txt_calib_title.setText(R.string.str_calibration0D1);
+                    txt_calib_title.setTextColor(getResources().getColor(R.color.red));
+                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
+                }
+                else if(Get_title.equals("C_0D5"))
+                {
+                    txt_calib_title.setText(R.string.str_calibration0D5);
+                    txt_calib_title.setTextColor(getResources().getColor(R.color.red));
+                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
+                }
+
                 break;
             case R.id.calibration_btn_return:
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, PageMainMenu.class);
-//                startActivity(intent);
                 finish();
                 break;
         }
@@ -168,18 +226,24 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
 
 
     //writeToFile 方法如下
-    private void writeToFile(File fout, String data) {
-        FileOutputStream osw = null;
-        try {
-            osw = new FileOutputStream(fout);
-            osw.write(data.getBytes());
-            osw.flush();
-        } catch (Exception e) {
-        } finally {
-            try {
-                osw.close();
-            } catch (Exception e) {
+    private void writeToFile(File fout, String data[][], int Row_length,int Cell_length) {
+
+        try{
+            //建立FileOutputStream物件，路徑為SD卡中的output.txt
+            FileOutputStream output = new FileOutputStream(fout);
+
+            for (int i = 0; i < Row_length; i++) {
+                if(!data[i][0].equals("")) {
+                    for (int j = 0; j < Cell_length; j++) {
+                        output.write(data[i][j].getBytes());
+                        output.write(",".getBytes());
+                    }
+                    output.write("\r\n".getBytes());
+                }
             }
+            output.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -223,6 +287,83 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         }
         return data.toString();
     }
+
+
+
+
+    //readFromFile 方法如下
+    private String[] readFromFiletoArray(File fin) {
+        StringBuilder data3 = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(fin), "utf-8"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                data3.append(line + "\r\n");
+            }
+        } catch (Exception e) {
+        } finally {
+            try {
+                reader.close();
+            } catch (Exception e) {
+            }
+        }
+
+        ArrayList<String> stringArray = new ArrayList<String>();
+
+        String[] splitArray = data3.toString().split("\r\n");
+
+        for (int i = 0; i < splitArray.length; i++) {
+
+            stringArray.add(splitArray[i]);
+        }
+        return splitArray;
+    }
+
+
+    private String[][] DataArrayfomat(String[] inArray)
+    {
+        String[][] retrunArray = new String[inArray.length][6];
+        for(int i=0; i<inArray.length;i++){
+            String[] splitArray = inArray[i].split(",");
+            for(int j=0; j<splitArray.length;j++){
+                retrunArray[i][j] = splitArray[j];
+            }
+        }
+        return retrunArray;
+    }
+
+    private final Handler handler = new Handler();
+    private final Runnable runnable = new Runnable() {
+        public void run() {
+            if(Calibration_Start_Flag > 0)
+            {
+                if(Calibration_count > 0){
+                    Calibration_count--;
+                }
+                else
+                {
+                    btn_calib_start.setEnabled(false);
+                    Calibration_Start_Flag = 0;
+                }
+                txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
+
+                Get_Int_Tmpeture = mainActivity.readADC(1);
+                Get_Str_tmpeture = Integer.toString(Get_Int_Tmpeture);
+                txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmpeture + getResources().getText(R.string.str_unit_tmpeC).toString() );
+
+                Get_Int_Sensor = mainActivity.readADC(0);
+                Get_Str_Sensor = Integer.toString(Get_Int_Sensor);
+                txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + Get_Str_Sensor + getResources().getText(R.string.str_unit_percentage).toString() );
+            }
+            else{ //Calibration_Start_Flag = 0
+
+            }
+            handler.postDelayed(this, 1000);
+        }
+    };
+
     /**
      * 隐藏虚拟按键，并且全屏
      */

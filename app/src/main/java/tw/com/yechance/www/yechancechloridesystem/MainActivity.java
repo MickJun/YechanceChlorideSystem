@@ -407,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     byte[] ttTemp ={0x0};
     private final Runnable runnable = new Runnable() {
         public void run() {
-            if(ttTemp[0] < 3) {
+            if(ttTemp[0] < 1) {
                 ttTemp[0]++;
             }
             else
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ttTemp[0] = 0;
             }
             if (BTSocket != null && BTSocket.isConnected()){sendMessage(ttTemp);}
-            handler.postDelayed(this,1000);
+            handler.postDelayed(this,450);
         }
     };
 
