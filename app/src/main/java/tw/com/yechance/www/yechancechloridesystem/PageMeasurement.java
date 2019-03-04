@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -21,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import woyou.aidlservice.jiuiv5.IWoyouService;
@@ -44,8 +46,37 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
     private TextView  txt_meas_1;
     private TextView  txt_meas_2;
 
-    private String  Get_title,Get_Str_tmpeture,Str_for_Temp;
-    private int     Get_int_tmpeture;
+//    private String  Get_title,Get_Str_tmpeture,Str_for_Temp;
+////    private int     Get_int_tmpeture;
+
+    private String  Get_title,Get_Str_tmperature, Get_Str_Sensor,Str_for_Temp,Get_Str_Keyin;
+    private int     Get_Int_Tmperature, Get_Int_Sensor,Get_Int_Keyin;
+
+
+    //取得內部儲存體擺放檔案的目錄
+    //預設擺放目錄為 /data/data/[package.name]/file
+    File dir = null;
+    String datafilename = "data.txt";
+    String settingfilename = "setting.txt";
+    String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
+            {"21","17874.4","21","10474.58"}
+    };
+
+    String Readingdata[][] = {{"title","YYYY/MM/DD hh:mm:ss","Temp","Typing","txt1","txt2"},
+            {"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
+            {"細粒料氯離子含量測定","2002/02/02 22:22:22","2","22","222","2222"},
+            {"水溶液氯離子含量測定","2003/03/03 33:33:33","3","33","333","3333"}
+    };
+
+    File exDataFile = null;
+
+    File exSettingFile = null;
+
+    private String[][] File_Data_Array,File_Setting_Array;
+    private String[] File_Read_Row_Array;
+
+    private  int Measurement_count = 120,Measurement_Start_Flag = 0;
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
 
     @Override
     public void onRestart() {
@@ -111,15 +142,38 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
         mainActivity = ((MickTest) getApplication()).getMainActivity();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+        dir = this.getExternalFilesDir(null);
+        //開啟或建立該目錄底下的檔案
+        exDataFile = new File(dir, datafilename);
+
+        File_Read_Row_Array = readFromFiletoArray(exDataFile);
+        File_Data_Array = DataArrayfomat(File_Read_Row_Array);
+        if(File_Data_Array[0][0].equals("")){
+            writeToFile(exDataFile, Readingdata,Readingdata.length,4);
+            File_Read_Row_Array = readFromFiletoArray(exDataFile);
+            File_Data_Array = DataArrayfomat(File_Read_Row_Array);
+        }
+
+        exSettingFile = new File(dir, settingfilename);
+        File_Read_Row_Array = readFromFiletoArray(exSettingFile);
+        File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
+        if(File_Setting_Array[0][0].equals("")){
+            writeToFile(exDataFile, Settingdata,Settingdata.length,4);
+            File_Read_Row_Array = readFromFiletoArray(exDataFile);
+            File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
+        }
+
+
+
+
 
         Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
         String str = formatter.format(curDate);
         txt_meas_date.setText(str);
 
-        Get_int_tmpeture = mainActivity.readADC(1);
-        Get_Str_tmpeture = Integer.toString(Get_int_tmpeture);
-        txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmpeture + getResources().getText(R.string.str_unit_tmpeC).toString() );
+        Get_Int_Tmperature = mainActivity.readADC(1);
+        Get_Str_tmperature = Integer.toString(Get_Int_Tmperature);
+        txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
 
         //取的intent中的bundle物件
         Bundle bundle =this.getIntent().getExtras();
@@ -163,30 +217,35 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.measurement_btn_start:
 
-                int Inn1 = mainActivity.readADC(0);
-                txt_meas_1.setText(Integer.toString(Inn1));
-
-                Inn1 = mainActivity.readADC(1);
-                txt_meas_2.setText(Integer.toString(Inn1));
-
-                //取得內部儲存體擺放檔案的目錄
-                //預設擺放目錄為 /data/data/[package.name]/file
-                File dir = this.getExternalFilesDir(null);
-                String filename = "test.txt";
-
-                //開啟或建立該目錄底下檔名為 "test.txt" 的檔案
-                File inFile = new File(dir, filename);
-
-                //讀取 /data/data/com.myapp/test.txt 檔案內容
-                String data = readFromFile(inFile);
-                txt_meas_1.setText(data);
-               //將檔案存放在 getExternalFilesDir() 目錄
-                if (isExtStorageWritable()){
-                    File outFile = new File(dir, filename);
-                    writeToFile(outFile, "Hello! measurement");
+                if(edit_meas_typing.getText().toString().equals(""))
+                {
+                    Toast.makeText(getApplicationContext(), "請輸入數字",	Toast.LENGTH_SHORT).show();
+                    break;
                 }
+
+                if(Measurement_Start_Flag == 0)
+                {
+                    Measurement_count = 120;
+                    Measurement_Start_Flag = 1;
+                    btn_meas_start.setText(getResources().getText(R.string.str_ing_test).toString() );
+                }
+                else
+                {
+                    Measurement_count = 0;
+                    Measurement_Start_Flag = 0;
+                    //txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
+                    btn_meas_start.setText(getResources().getText(R.string.str_end_test).toString() );
+                    btn_meas_start.setEnabled(false);
+                }
+
                 break;
             case R.id.measurement_btn_print:
+                //save
+
+
+
+
+                //print
                 Intent intent_S = new Intent();
                 //intent_S.setClass(PageMainMenu.this, PageSystemSetUp.class);
                 intent_S.setClass(PageMeasurement.this, PagePrinter.class);
@@ -209,32 +268,35 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent_S);
                 break;
             case R.id.measurement_btn_retest:
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, PageMainMenu.class);
-//                startActivity(intent);
+                Measurement_count = 120;
+                btn_meas_start.setText(getResources().getText(R.string.str_start_test).toString() );
+                btn_meas_start.setEnabled(true);
                 break;
             case R.id.measurement_btn_return:
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, PageMainMenu.class);
-//                startActivity(intent);
                 finish();
                 break;
         }
     }
 
     //writeToFile 方法如下
-    private void writeToFile(File fout, String data) {
-        FileOutputStream osw = null;
-        try {
-            osw = new FileOutputStream(fout);
-            osw.write(data.getBytes());
-            osw.flush();
-        } catch (Exception e) {
-        } finally {
-            try {
-                osw.close();
-            } catch (Exception e) {
+    private void writeToFile(File fout, String data[][], int Row_length,int Cell_length) {
+
+        try{
+            //建立FileOutputStream物件，路徑為SD卡中的output.txt
+            FileOutputStream output = new FileOutputStream(fout);
+
+            for (int i = 0; i < Row_length; i++) {
+                if(!data[i][0].equals("")) {
+                    for (int j = 0; j < Cell_length; j++) {
+                        output.write(data[i][j].getBytes());
+                        output.write(",".getBytes());
+                    }
+                    output.write("\r\n".getBytes());
+                }
             }
+            output.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -278,6 +340,108 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
         }
         return data.toString();
     }
+
+
+
+
+    //readFromFile 方法如下
+    private String[] readFromFiletoArray(File fin) {
+        StringBuilder data3 = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(fin), "utf-8"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                data3.append(line + "\r\n");
+            }
+        } catch (Exception e) {
+        } finally {
+            try {
+                reader.close();
+            } catch (Exception e) {
+            }
+        }
+
+        ArrayList<String> stringArray = new ArrayList<String>();
+
+        String[] splitArray = data3.toString().split("\r\n");
+
+        for (int i = 0; i < splitArray.length; i++) {
+
+            stringArray.add(splitArray[i]);
+        }
+        return splitArray;
+    }
+
+
+    private String[][] DataArrayfomat(String[] inArray)
+    {
+        String[][] retrunArray = new String[inArray.length][6];
+        for(int i=0; i<inArray.length;i++){
+            String[] splitArray = inArray[i].split(",");
+            for(int j=0; j<splitArray.length;j++){
+                retrunArray[i][j] = splitArray[j];
+            }
+        }
+        return retrunArray;
+    }
+
+    private final Handler handler = new Handler();
+    private final Runnable runnable = new Runnable() {
+        public void run() {
+            if(Measurement_Start_Flag > 0)
+            {
+                if(Measurement_count > 0){
+                    Measurement_count--;
+                }
+                else
+                {
+
+                    btn_meas_start.setText(getResources().getText(R.string.str_end_test).toString() );
+                    btn_meas_start.setEnabled(false);
+                    Measurement_Start_Flag = 0;
+                }
+                //txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
+
+                Get_Int_Tmperature = mainActivity.readADC(1);
+                Get_Str_tmperature = Integer.toString(Get_Int_Tmperature);
+                txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
+
+                Get_Int_Sensor = mainActivity.readADC(0);
+                Get_Str_Sensor = Integer.toString(Get_Int_Sensor);
+
+
+
+                if(Get_title.equals("M_CC"))
+                {
+                    //Cc = Cw * W * (1/100)
+
+
+                    txt_meas_1.setText(getResources().getText(R.string.str_water_cl).toString() + getResources().getText(R.string.str_unit_percentage).toString());
+                    txt_meas_2.setText(getResources().getText(R.string.str_CC_summarize).toString() + getResources().getText(R.string.str_unit_percentage).toString());
+                }
+                else if(Get_title.equals("M_FAC"))
+                {
+                    txt_meas_1.setText(getResources().getText(R.string.str_water_cl).toString() + getResources().getText(R.string.str_unit_percentage).toString());
+                    txt_meas_2.setText(getResources().getText(R.string.str_FAC_summarize).toString() + getResources().getText(R.string.str_unit_percentage).toString());
+
+                }
+                else if(Get_title.equals("M_WC"))
+                {
+                    txt_meas_1.setText(getResources().getText(R.string.str_water_cl).toString() + getResources().getText(R.string.str_unit_percentage).toString());
+                    txt_meas_2.setText(getResources().getText(R.string.str_FAC_summarize).toString() + getResources().getText(R.string.str_unit_percentage).toString());
+                }
+
+            }
+            else{ //Measurement_Start_Flag = 0
+
+            }
+            handler.postDelayed(this, 1000);
+        }
+    };
+
+
     /**
      * 隐藏虚拟按键，并且全屏
      */

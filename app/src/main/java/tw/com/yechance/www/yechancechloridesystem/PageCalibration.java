@@ -33,8 +33,8 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
     private TextView  txt_calib_device_read;
 
 
-    private String  Get_title,Get_Str_tmpeture, Get_Str_Sensor,Str_for_Temp;
-    private int     Get_Int_Tmpeture, Get_Int_Sensor;
+    private String  Get_title,Get_Str_tmperature, Get_Str_Sensor,Str_for_Temp;
+    private int     Get_Int_Tmperature, Get_Int_Sensor;
 
 
     //取得內部儲存體擺放檔案的目錄
@@ -176,14 +176,14 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
             case R.id.calibration_btn_sure:
                 if(Get_title.equals("C_0D1"))
                 {
-                    File_Save_Array[1][0] = Get_Str_tmpeture;
+                    File_Save_Array[1][0] = Get_Str_tmperature;
                     txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     File_Save_Array[1][1] = Get_Str_Sensor;
                     txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
                 }
                 else if(Get_title.equals("C_0D5"))
                 {
-                    File_Save_Array[1][2] = Get_Str_tmpeture;
+                    File_Save_Array[1][2] = Get_Str_tmperature;
                     txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     File_Save_Array[1][3] = Get_Str_Sensor;
                     txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
@@ -349,9 +349,9 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                 }
                 txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
 
-                Get_Int_Tmpeture = mainActivity.readADC(1);
-                Get_Str_tmpeture = Integer.toString(Get_Int_Tmpeture);
-                txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmpeture + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                Get_Int_Tmperature = mainActivity.readADC(1);
+                Get_Str_tmperature = Integer.toString(Get_Int_Tmperature);
+                txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
 
                 Get_Int_Sensor = mainActivity.readADC(0);
                 Get_Str_Sensor = Integer.toString(Get_Int_Sensor);

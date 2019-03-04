@@ -32,6 +32,7 @@
     <string name="str_start_calibration">開始校正</string>
     <string name="str_end_calibration">結束校正</string>
     <string name="str_start_test">開始測試</string>
+    <string name="str_ing_test">測試中</string>
     <string name="str_end_test">結束測試</string>
     <string name="str_device_read">目前參數：</string>
     <string name="str_timer">剩餘時間</string>
