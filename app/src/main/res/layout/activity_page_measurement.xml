@@ -44,6 +44,7 @@
 
             <TextView
                 android:id="@+id/measurement_txt_typing_title"
+                android:gravity="center_vertical"
                 android:background="@drawable/text_bg2"
                 android:layout_width="160dp"
                 android:layout_height="40dp"
@@ -52,7 +53,7 @@
 
             <EditText
                 android:id="@+id/measurement_editText_typing"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:background="@drawable/text_bg2"
                 android:layout_width="90dp"
                 android:layout_height="40dp"
@@ -63,6 +64,7 @@
 
             <TextView
                 android:id="@+id/measurement_txt_typing_unit"
+                android:gravity="center_vertical"
                 android:background="@drawable/text_bg2"
                 android:layout_width="110dp"
                 android:layout_height="40dp"
@@ -72,6 +74,7 @@
 
         <TextView
             android:id="@+id/measurement_txt_1"
+            android:gravity="center_vertical"
             android:background="@drawable/text_bg2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -79,11 +82,12 @@
             android:textSize="25sp" />
         <TextView
             android:id="@+id/measurement_txt_2"
+            android:gravity="center_vertical"
             android:background="@drawable/text_bg2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/str_CC_summarize"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
         <Button
             android:id="@+id/measurement_btn_start"
             style="style=@style/Widget.AppCompat.Button"

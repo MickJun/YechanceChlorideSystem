@@ -36,7 +36,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
     private TextView  txt_2;
 
     private String str_print_1,str_print_2,str_print_3,str_print_4;
-
+    private String Str_title ="";
 //    public void Update_Status(String str_Temp1, String str_Temp2,String str_Temp3,String str_Temp4) {
 //        str_print_1 = str_Temp1;
 //        str_print_2 = str_Temp2;
@@ -103,11 +103,16 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         //取的intent中的bundle物件
         Bundle bundle =this.getIntent().getExtras();
         txt_title.setText(bundle.getString("title"));
+        Str_title = bundle.getString("title");
         txt_date.setText(bundle.getString("date"));
         txt_temperature.setText(bundle.getString("temperature"));
         txt_typing.setText(bundle.getString("typing"));
         txt_1.setText(bundle.getString("txt_1"));
         txt_2.setText(bundle.getString("txt_2"));
+
+        if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
+            txt_2.setTextSize(20);
+        }
 
         Intent intent_P = new Intent();
         intent_P.setPackage("woyou.aidlservice.jiuiv5");
@@ -136,9 +141,17 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
                     woyouService.printTextWithFont("**" + txt_title.getText().toString() + "**\n","",30,callback);
                     woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
                     woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
-                    woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
+                    if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                        woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
+                    }
                     woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
-                    woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
+                    if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
+                        woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",23,callback);
+                    }else{
+                        if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                            woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
+                        }
+                    }
                     woyouService.printTextWithFont("*********************\n","",36,callback);
                     woyouService.printTextWithFont("會驗人員簽名\n","",30,callback);
                     woyouService.printTextWithFont("\n","",30,callback);
