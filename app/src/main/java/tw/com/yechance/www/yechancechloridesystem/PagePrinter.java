@@ -108,7 +108,13 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         txt_temperature.setText(bundle.getString("temperature"));
         txt_typing.setText(bundle.getString("typing"));
         txt_1.setText(bundle.getString("txt_1"));
-        txt_2.setText(bundle.getString("txt_2"));
+        if(Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+            txt_2.setText("");
+        }else{
+            txt_2.setText(bundle.getString("txt_2"));
+        }
+
+
 
         if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
             txt_2.setTextSize(20);

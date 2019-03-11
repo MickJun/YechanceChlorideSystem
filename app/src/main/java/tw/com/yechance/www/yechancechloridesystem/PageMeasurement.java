@@ -50,7 +50,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 //    private String  Get_title,Get_Str_tmpeture,Str_for_Temp;
 ////    private int     Get_int_tmpeture;
 
-    private String  Get_title,Get_Str_tmperature, Get_Str_Sensor,Str_for_Temp,Get_Str_Keyin,Get_Str_EndData;
+    private String  Get_title = "",Get_Str_tmperature = "", Get_Str_Sensor = "",Str_for_Temp = "",Get_Str_Keyin = "",Get_Str_EndData = "0"; //end 不能為""
     private int     Get_Int_Tmperature, Get_Int_Sensor,Get_Int_Keyin;
 
     double Setting_Slope = 0, txt1_double = 0,Keyin_double = 0, txt2_double = 0;
@@ -263,6 +263,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.measurement_btn_print:
                 //save
+                if(Get_Str_EndData.equals("")){Get_Str_EndData = "0";} //最後一個參數必須要有值 因此 End不可為""
                 //{"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
                 File_Data_Array[File_Data_Array.length -1][0] = txt_meas_title.getText().toString();
                 File_Data_Array[File_Data_Array.length -1][1] = txt_meas_date.getText().toString();
