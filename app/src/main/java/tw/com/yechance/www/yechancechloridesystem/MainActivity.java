@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ListView Main_ListView ;
     private TextView Main_TextView ;
+    private int int_Init_flag = 0;
 
     // Get the default adapter
     public final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -156,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void BT_Connecting(){
         String str_temp = "";
         if(mBluetoothAdapter.isDiscovering())mBluetoothAdapter.cancelDiscovery();
-        BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice(BT_Addrlist.get(BT_Select_Point));//"00:11:22:33:44:55"
+        //BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice(BT_Addrlist.get(BT_Select_Point));//"00:11:22:33:44:55"
+        BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice("98:D3:31:FD:86:0A");//"00:11:22:33:44:55"
         try {
             BTSocket = connDevices.createRfcommSocketToServiceRecord(MY_UUID);
             BTSocket.connect();
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private Button btn_Main_Scan;
+    private Button btn_Main_End;
     private Button btn_Main_Connect;
     private Button btn_Main_start;
     //public ButtonListener BtnListener = new ButtonListener();
@@ -204,9 +206,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         hideBottomUIMenu();
 
-        if(btn_Main_Scan == null) {
-            btn_Main_Scan = this.findViewById(R.id.main_btn_scan);
-            btn_Main_Scan.setOnClickListener(this);
+        if(btn_Main_End == null) {
+            btn_Main_End = this.findViewById(R.id.main_btn_end);
+            btn_Main_End.setOnClickListener(this);
         }
         if(btn_Main_Connect == null) {
             btn_Main_Connect = this.findViewById(R.id.main_btn_connect);
@@ -225,8 +227,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Main_ListView = this.findViewById(R.id.main_list_bt);
         }
         handler.postDelayed(this.runnable,200);
+
+        BT_Scan();
+        ((MickTest) getApplication()).setMainActivity(this);
+        int_Init_flag = 1;
     }
 
+//    @Override
+//    protected void onPause()   //按下退出鍵 系統預設呼叫 onPause
+//    {
+//        finish();
+//        super.onDestroy(); //這行以防系統以為我亂呼叫
+//    }
+
+//
+//    @Override
+//    protected void onStop()
+//    {
+////        super.onDestroy();
+////        super.onStop();
+////        finish();
+//    }
     @Override
     public void onDestroy() {
 
@@ -244,14 +265,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(handler != null)handler.removeMessages(0);
         super.onDestroy();
+
+        //Kill myself
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        //unregisterReceiver(mReceiver);
-    }
 
     private MickTest myApplication = (MickTest) getApplication();
     private byte[] output_Final = {0x0a,0x0f,0x0b};
@@ -259,10 +277,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.main_btn_scan:
-                BT_Scan();
+            case R.id.main_btn_end:
+                finish();
                 break;
             case R.id.main_btn_start:
+
+                BT_Scan();
                 if (BTSocket == null) {
                     Toast.makeText(this, "没有连接", Toast.LENGTH_SHORT).show();
                     break;
@@ -407,6 +427,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     byte[] ttTemp ={0x0};
     private final Runnable runnable = new Runnable() {
         public void run() {
+
+            if(int_Init_flag > 0)
+            {
+                int_Init_flag++;
+            }
+            if(int_Init_flag >= 3){
+                int_Init_flag = 0;
+                BT_Connecting();
+                if (BTSocket != null) {
+                    Intent intent = new Intent();
+                    intent.setClass(MainActivity.this, PageMainMenu.class);
+                    startActivity(intent);
+                }
+            }
+
             if(ttTemp[0] < 1) {
                 ttTemp[0]++;
             }

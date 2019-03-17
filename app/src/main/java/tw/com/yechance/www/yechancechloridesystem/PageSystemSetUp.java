@@ -24,15 +24,15 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
 
     }    public void onClick(View v) {
 
-        switch (v.getId()) {
-            case R.id.main_btn_scan:
-                break;
-            case R.id.main_btn_connect:
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, PageMainMenu.class);
-//                startActivity(intent);
-//                finish();
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.main_btn_end:
+//                break;
+//            case R.id.main_btn_connect:
+////                Intent intent = new Intent();
+////                intent.setClass(MainActivity.this, PageMainMenu.class);
+////                startActivity(intent);
+////                finish();
+//                break;
+//        }
     }
 }

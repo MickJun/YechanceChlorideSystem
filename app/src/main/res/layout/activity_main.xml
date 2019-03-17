@@ -17,12 +17,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/main_btn_scan"
+                android:id="@+id/main_btn_end"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_scan" />
+                android:text="@string/str_end_program" />
 
             <Button
             android:id="@+id/main_btn_connect"
@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_connect" />
+            android:text="@string/str_auto_connect" />
 
             <Button
                 android:id="@+id/main_btn_start"
@@ -38,7 +38,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_start" />
+                android:text="@string/str_Entry_menu" />
 
 
         </LinearLayout>

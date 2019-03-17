@@ -60,7 +60,8 @@
                     android:layout_height="45dp"
                     android:background="@drawable/text_bg2"
                     android:text="@string/str_select_data"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:textColor="@color/red"/>
             </LinearLayout>
 
             <ListView

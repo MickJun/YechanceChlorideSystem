@@ -48,5 +48,8 @@
     <string name="str_unit_tmpeC">(℃)</string>
     <string name="str_unit_percentage">(%)</string>
     <string name="str_unit_second">秒</string>
+    <string name="str_end_program">結束程式</string>
+    <string name="str_auto_connect">自動連線</string>
+    <string name="str_Entry_menu">進入選單</string>
 
 </resources>
