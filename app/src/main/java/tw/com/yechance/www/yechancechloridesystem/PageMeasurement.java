@@ -63,7 +63,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
     String datafilename = "data.txt";
     String settingfilename = "setting.txt";
     String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
-            {"21","17874.4","21","10474.58"}
+            {"21","3456","21","4567"}
     };
 
     String Readingdata[][] = {{"title","YYYY/MM/DD hh:mm:ss","Temp","Typing","txt1","txt2"},
