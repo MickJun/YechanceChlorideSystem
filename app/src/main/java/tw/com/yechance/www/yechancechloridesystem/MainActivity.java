@@ -47,6 +47,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView Main_TextView ;
     private int int_Init_flag = 0;
 
+    private int tempdate[] = {
+            32865,32528,32183,31831,31471,31103,30728,30346,29957,29562,29161,28754,28341,27924,27502,27075,26645,26212,25775,25336,
+            24894,24451,24007,23562,23116,22671,22226,21782,21339,20898,20460,20024,19590,19160,18734,18311,17893,17479,17070,16666,
+            16267,15874,15487,15105,14730,14360,13997,13641,13290,12947,12610,12280,11956,11640,11330,11027,10730,10441,10158,9881,
+            9612,9349,9092,8841,8597,8360,8128,7902,7682,7469,7260,7058,6861,6669,6483,6302,6125,5954,5788,5626,
+            5469,5317,5169,5025,4885,4749,4617,4489,4365,4245,4128,4014,3904,3797,3693,3592,3494,3399,3307,3218,
+            3131
+    };
+
     // Get the default adapter
     public final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -332,13 +341,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     byte[] Get_buff = new byte[1024];
     String Read_Str = "", Read_One = "",Read_INT = "";
     public int readADC(int Index_I) {
-        int tempX;
+        int tempX,tempY;
         switch (Index_I){
             case 0 :
                 tempX = ADC_0;
                 break;
-            case 1 :
-                tempX = ADC_1;
+            case 1 : //temperature
+                tempX = 0;
+                tempY = ADC_1;
+
+                for(int v=0; v < 100;v++)
+                {
+                    if(tempY >= tempdate[v])
+                    {
+                        tempX = v;
+                        v = 120;
+                    }
+                    if(v == 100)
+                    {
+                        tempX = 100;
+                    }
+                }
+
                 break;
             case 2 :
                 tempX = ADC_2;
