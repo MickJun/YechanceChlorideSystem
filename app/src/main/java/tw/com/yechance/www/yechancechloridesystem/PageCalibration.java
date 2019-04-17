@@ -43,7 +43,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
     //String datafilename = "data.txt";
     String settingfilename = "setting.txt";
     String Sdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
-                        {"21","3456","21","4567"}
+            {"26","-1208","26","-659"}
     };
 
     File exDataFile = null;
@@ -85,6 +85,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         if(btn_calib_sure == null) {
             btn_calib_sure = this.findViewById(R.id.calibration_btn_sure);
             btn_calib_sure.setOnClickListener(this);
+            btn_calib_sure.setEnabled(false);
         }
         if(btn_calib_Re_calib == null) {
             btn_calib_Re_calib = this.findViewById(R.id.calibration_btn_re_calibration);
@@ -134,16 +135,16 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
             txt_calib_title.setText(R.string.str_calibration0D1);
             txt_calib_title.setTextColor(getResources().getColor(R.color.red));
             txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
-            txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
+            txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1]  );
         }
         else if(Get_title.equals("C_0D5"))
         {
             txt_calib_title.setText(R.string.str_calibration0D5);
             txt_calib_title.setTextColor(getResources().getColor(R.color.red));
             txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
-            txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
+            txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3]
+            );
         }
-
 
 
 
@@ -167,6 +168,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                     Calibration_Start_Flag = 0;
                     txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
                     btn_calib_start.setEnabled(false);
+                    btn_calib_sure.setEnabled(true);
                 }
 
 
@@ -197,7 +199,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                 Calibration_count = 120;
                 txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
                 btn_calib_start.setEnabled(true);
-
+                btn_calib_sure.setEnabled(false);
                 //讀取 /data/data/com.myapp/test.txt 檔案內容
                 File_Read_Row_Array = readFromFiletoArray(exDataFile);
                 File_Save_Array = DataArrayfomat(File_Read_Row_Array);
@@ -345,6 +347,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                 else
                 {
                     btn_calib_start.setEnabled(false);
+                    btn_calib_sure.setEnabled(true);
                     Calibration_Start_Flag = 0;
                 }
                 txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());

@@ -53,7 +53,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
     private String  Get_title = "",Get_Str_tmperature = "", Get_Str_Sensor = "",Str_for_Temp = "",Get_Str_Keyin = "",Get_Str_EndData = "0"; //end 不能為""
     private int     Get_Int_Tmperature, Get_Int_Sensor,Get_Int_Keyin;
 
-    double Setting_Slope = 0, txt1_double = 0,Keyin_double = 0, txt2_double = 0;
+    double Setting_Slope = 0, txt1_double = 0,Keyin_double = 0, txt2_double = 0, intercept = 0;
     private DecimalFormat df = new DecimalFormat("##0.0000");
 
 
@@ -63,7 +63,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
     String datafilename = "data.txt";
     String settingfilename = "setting.txt";
     String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
-            {"21","3456","21","4567"}
+            {"26","-1208","26","-659"}
     };
 
     String Readingdata[][] = {{"title","YYYY/MM/DD hh:mm:ss","Temp","Typing","txt1","txt2"},
@@ -447,12 +447,20 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
 
                 Get_Int_Sensor = mainActivity.readADC(0); // = CL
-                Setting_Slope = (Integer.parseInt(File_Setting_Array[1][3]) - Integer.parseInt(File_Setting_Array[1][1])) / 0.4f;
+                //Setting_Slope = (Integer.parseInt(File_Setting_Array[1][3]) - Integer.parseInt(File_Setting_Array[1][1])) / 0.4f;
 
                 //Get_Str_Sensor = Integer.toString(Get_Int_Sensor);
+                //Integer.parseInt(File_Setting_Array[1][3]) 0.5% = E2
+                //Integer.parseInt(File_Setting_Array[1][1]) 0.1% = E1
+//                File_Setting_Array[1][1] = "-1208";
+//                File_Setting_Array[1][3] = "-659";
+//                Get_Int_Sensor= -713;
+                Setting_Slope = (Integer.parseInt(File_Setting_Array[1][1]) - Integer.parseInt(File_Setting_Array[1][3])) / (Math.log10(1000)-Math.log10(5000));   //=(E1-E2)/(log(1000)-LOG(5000))
+                intercept = Integer.parseInt(File_Setting_Array[1][1])  - (Setting_Slope * Math.log10(1000)); //E1 - m * log(1000)
 
+                txt1_double = Math.pow(10,((Get_Int_Sensor - intercept) / Setting_Slope))/10000;
 
-                txt1_double = Get_Int_Sensor / Setting_Slope ;
+                //txt1_double = Get_Int_Sensor / Setting_Slope ;
                 Get_Str_Sensor = df.format(txt1_double);
                 txt_meas_1.setText(getResources().getText(R.string.str_water_cl).toString() + Get_Str_Sensor + getResources().getText(R.string.str_unit_percentage).toString());
 
