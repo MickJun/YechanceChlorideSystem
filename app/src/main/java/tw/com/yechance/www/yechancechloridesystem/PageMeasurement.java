@@ -216,6 +216,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
             txt_meas_2.setText("");
             txt_meas_2.setVisibility(View.INVISIBLE);
         }
+        handler.postDelayed(this.runnable, 1000);
 
     }
     public void onClick(View v) {
@@ -235,9 +236,10 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                     String str = formatter.format(curDate);
                     txt_meas_date.setText(str);
                     Measurement_count = 120;
+                    mainActivity.first_write();
                     Measurement_Start_Flag = 1;
                     btn_meas_start.setText(getResources().getText(R.string.str_ing_test).toString() );
-                    handler.postDelayed(this.runnable, 1000);
+                    //handler.postDelayed(this.runnable, 1000);
                     if(!edit_meas_typing.getText().toString().equals("")) {
                         Keyin_double = Double.parseDouble(edit_meas_typing.getText().toString());
                         Get_Str_Keyin = Double.toString(Keyin_double);

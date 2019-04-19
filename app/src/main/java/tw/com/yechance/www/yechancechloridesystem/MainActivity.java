@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void BT_Connecting(){
         String str_temp = "";
         if(mBluetoothAdapter.isDiscovering())mBluetoothAdapter.cancelDiscovery();
-        //BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice(BT_Addrlist.get(BT_Select_Point));//"00:11:22:33:44:55"
-        BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice("98:D3:31:FD:86:0A");//"00:11:22:33:44:55"
+        BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice(BT_Addrlist.get(BT_Select_Point));//"00:11:22:33:44:55"
+        //BluetoothDevice connDevices = mBluetoothAdapter.getRemoteDevice("98:D3:31:FD:86:0A");//"00:11:22:33:44:55"
         try {
             BTSocket = connDevices.createRfcommSocketToServiceRecord(MY_UUID);
             BTSocket.connect();
@@ -250,6 +250,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(Main_ListView == null){
             Main_ListView = this.findViewById(R.id.main_list_bt);
         }
+
+        first_write();
         handler.postDelayed(this.runnable,200);
 
         BT_Scan();
@@ -391,8 +393,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return tempX;
     }
-
-    private int ADC_0 = 0,ADC_1 = 0, ADC_2 = 0, ADC_3 =0;
+    public void first_write(){
+        for(int X=0;X<Filter_Size;X++){
+            ADC_Filter[X]=ADC_Old;
+        }
+        ADC_0 = ADC_Old;
+    }
+    private int ADC_0 = 0,ADC_1 = 0, ADC_2 = 0, ADC_3 =0, ADC_F_Count = 0,ADC_Temp = 0,Filter_Size = 30,ADC_Old = 0;
+    //ADC_Filter
+    private int[] ADC_Filter = new int[30]; // = Filter_Size
 
     public class readThread extends Thread {
 
@@ -431,7 +440,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                         if (!Read_INT.equals("")) {
                                             if (Read_One.equals("A")) {
-                                                ADC_0 = Integer.parseInt(Read_INT);
+                                                ADC_Filter[ADC_F_Count]  = Integer.parseInt(Read_INT);
+                                                ADC_Old = ADC_Filter[ADC_F_Count];
+                                                if(ADC_F_Count >= (Filter_Size - 1))ADC_F_Count = 0;
+                                                else{
+                                                    ADC_F_Count++;
+                                                }
+                                                ADC_Temp = 0;
+                                                for(int z=0;z<Filter_Size;z++){
+                                                    ADC_Temp +=  ADC_Filter[z];
+                                                }
+                                                ADC_0 = ADC_Temp / Filter_Size;
+
+
                                             }
                                             if (Read_One.equals("B")) {
                                                 ADC_1 = Integer.parseInt(Read_INT);

@@ -160,6 +160,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                 if(Calibration_Start_Flag == 0)
                 {
                     Calibration_count = 120;
+                    mainActivity.first_write();
                     Calibration_Start_Flag = 1;
                 }
                 else
@@ -181,14 +182,14 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                     File_Save_Array[1][0] = Get_Str_tmperature;
                     txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     File_Save_Array[1][1] = Get_Str_Sensor;
-                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] );
                 }
                 else if(Get_title.equals("C_0D5"))
                 {
                     File_Save_Array[1][2] = Get_Str_tmperature;
                     txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     File_Save_Array[1][3] = Get_Str_Sensor;
-                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] );
                 }
                 writeToFile(exDataFile, File_Save_Array,File_Save_Array.length,4);
                 Toast.makeText(getApplicationContext(), "儲存完成",	Toast.LENGTH_SHORT).show();
@@ -209,14 +210,14 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                     txt_calib_title.setText(R.string.str_calibration0D1);
                     txt_calib_title.setTextColor(getResources().getColor(R.color.red));
                     txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
-                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] + getResources().getText(R.string.str_unit_percentage).toString() );
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1]  );
                 }
                 else if(Get_title.equals("C_0D5"))
                 {
                     txt_calib_title.setText(R.string.str_calibration0D5);
                     txt_calib_title.setTextColor(getResources().getColor(R.color.red));
                     txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
-                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] + getResources().getText(R.string.str_unit_percentage).toString() );
+                    txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3]  );
                 }
 
                 break;
@@ -358,7 +359,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
 
                 Get_Int_Sensor = mainActivity.readADC(0);
                 Get_Str_Sensor = Integer.toString(Get_Int_Sensor);
-                txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + Get_Str_Sensor + getResources().getText(R.string.str_unit_percentage).toString() );
+                txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + Get_Str_Sensor  );
             }
             else{ //Calibration_Start_Flag = 0
 
