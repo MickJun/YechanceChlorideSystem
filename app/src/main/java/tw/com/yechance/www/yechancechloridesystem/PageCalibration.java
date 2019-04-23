@@ -1,5 +1,7 @@
 package tw.com.yechance.www.yechancechloridesystem;
 
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -53,6 +55,8 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
 
     private  int Calibration_count = 120,Calibration_Start_Flag = 0;
 
+    private SoundPool soundPool;
+    private int alertId;
 
     @Override
     public void onRestart() {
@@ -147,8 +151,8 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         }
 
 
-
-
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        alertId = soundPool.load(this,(R.raw.alarm1), 1);
 
     }
 
@@ -350,6 +354,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                     btn_calib_start.setEnabled(false);
                     btn_calib_sure.setEnabled(true);
                     Calibration_Start_Flag = 0;
+                    soundPool.play(alertId, 1.0F, 1.0F, 0, 0, 1.5F);
                 }
                 txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
 

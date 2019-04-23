@@ -2,6 +2,8 @@ package tw.com.yechance.www.yechancechloridesystem;
 
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -81,6 +83,10 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
     private  int Measurement_count = 120,Measurement_Start_Flag = 0;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+
+
+    private SoundPool soundPool;
+    private int alertId;
 
     @Override
     public void onRestart() {
@@ -217,6 +223,9 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
             txt_meas_2.setVisibility(View.INVISIBLE);
         }
         handler.postDelayed(this.runnable, 1000);
+
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        alertId = soundPool.load(this,(R.raw.alarm1), 1);
 
     }
     public void onClick(View v) {
@@ -441,6 +450,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                     btn_meas_start.setEnabled(false);
                     btn_meas_Print.setEnabled(true);
                     Measurement_Start_Flag = 0;
+                    soundPool.play(alertId, 1.0F, 1.0F, 0, 0, 1.5F);
                 }
                 //txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
 
