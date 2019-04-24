@@ -44,7 +44,7 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
     File dir = null;
     String datafilename = "data.txt";
     String settingfilename = "setting.txt";
-    String Sdata[][] = {{"title","YYYY/MM/DD hh:mm:ss","Temp","Typing","txt1","txt2"},
+    String Sdata[][] = {{"水溶液氯離子含量測定","2000/12/31 00:00:00","0","00","000","0000"},
             {"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
             {"細粒料氯離子含量測定","2002/02/02 22:22:22","2","22","222","2222"},
             {"水溶液氯離子含量測定","2003/03/03 33:33:33","3","33","333","3333"}
