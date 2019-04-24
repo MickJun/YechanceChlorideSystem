@@ -10,16 +10,21 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import woyou.aidlservice.jiuiv5.ICallback;
 import woyou.aidlservice.jiuiv5.IWoyouService;
 
-public class PagePrinter extends AppCompatActivity  implements View.OnClickListener{
+public class PagePrinter extends AppCompatActivity  implements View.OnClickListener, View.OnTouchListener{
 
 
 
@@ -44,6 +49,10 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
 //        str_print_4 = str_Temp4;
 //    }
 
+    private final Handler handler = new Handler();
+    private int Touch_Down_count = 0;
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+
     @Override
     public void onRestart() {
         super.onRestart();  // Always call the superclass method first
@@ -65,7 +74,8 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
 
         if(btn_Print_Print == null) {
             btn_Print_Print = this.findViewById(R.id.print_btn_print);
-            btn_Print_Print.setOnClickListener(this);
+            //btn_Print_Print.setOnClickListener(this);
+            btn_Print_Print.setOnTouchListener(this);
         }
         if(btn_Print_Return == null) {
             btn_Print_Return = this.findViewById(R.id.print_btn_return);
@@ -136,40 +146,41 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         intent_P.setAction("woyou.aidlservice.jiuiv5.IWoyouService");
         stopService(intent_P);
         unbindService(connService);
+        if(handler != null)handler.removeMessages(0);
         super.onDestroy();
     }
 
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.print_btn_print:
-                try{
-                    woyouService.printTextWithFont("**" + txt_title.getText().toString() + "**\n","",30,callback);
-                    woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
-                    woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
-                    if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
-                        woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
-                    }
-                    woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
-                    if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
-                        woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",23,callback);
-                    }else{
-                        if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
-                            woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
-                        }
-                    }
-                    woyouService.printTextWithFont("*********************\n","",36,callback);
-                    woyouService.printTextWithFont("會驗人員簽名\n","",30,callback);
-                    woyouService.printTextWithFont("\n","",30,callback);
-                    woyouService.printTextWithFont("\n","",30,callback);
-                    woyouService.printTextWithFont("\n","",30,callback);
-                    woyouService.printTextWithFont("*********************\n","",36,callback);
-                    woyouService.printTextWithFont("\n","",30,callback);
-                    woyouService.printTextWithFont("\n","",30,callback);
-                }catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            break;
+//            case R.id.print_btn_print:
+//                try{
+//                    woyouService.printTextWithFont("**" + txt_title.getText().toString() + "**\n","",30,callback);
+//                    woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
+//                    woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
+//                    if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+//                        woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
+//                    }
+//                    woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
+//                    if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
+//                        woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",23,callback);
+//                    }else{
+//                        if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+//                            woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
+//                        }
+//                    }
+//                    woyouService.printTextWithFont("*********************\n","",36,callback);
+//                    woyouService.printTextWithFont("會驗人員簽名\n","",30,callback);
+//                    woyouService.printTextWithFont("\n","",30,callback);
+//                    woyouService.printTextWithFont("\n","",30,callback);
+//                    woyouService.printTextWithFont("\n","",30,callback);
+//                    woyouService.printTextWithFont("*********************\n","",36,callback);
+//                    woyouService.printTextWithFont("\n","",30,callback);
+//                    woyouService.printTextWithFont("\n","",30,callback);
+//                }catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
+//            break;
             case R.id.print_btn_return:
                 finish();
                 break;
@@ -222,4 +233,87 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
 
     }
 
+    public void Print_data(int Now_date){
+        try{
+            woyouService.printTextWithFont("**" + txt_title.getText().toString() + "**\n","",30,callback);
+            if(Now_date == 1)
+            {
+//                Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
+//                String str = formatter.format(curDate);
+                woyouService.printTextWithFont("       "  +"\n","",30,callback);
+            }
+            else
+            {
+                woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
+            }
+            woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
+            if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
+            }
+            woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
+            if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
+                woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",23,callback);
+            }else{
+                if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                    woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
+                }
+            }
+            woyouService.printTextWithFont("*********************\n","",36,callback);
+            woyouService.printTextWithFont("會驗人員簽名\n","",30,callback);
+            woyouService.printTextWithFont("\n","",30,callback);
+            woyouService.printTextWithFont("\n","",30,callback);
+            woyouService.printTextWithFont("\n","",30,callback);
+            woyouService.printTextWithFont("*********************\n","",36,callback);
+            woyouService.printTextWithFont("\n","",30,callback);
+            woyouService.printTextWithFont("\n","",30,callback);
+        }catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            switch (v.getId()) {
+                case R.id.print_btn_print:
+                    Touch_Down_count = 1;
+                    handler.postDelayed(runnable,1000);
+                    break;
+            }
+            Log.d("test", v.getId()+ " button ---> press");
+        }
+
+        //Release
+        if(event.getAction() == MotionEvent.ACTION_UP) {
+            Log.d("test", v.getId() + " button ---> release");
+            switch (v.getId()) {
+                case R.id.print_btn_print:
+                    if(Touch_Down_count > 0 && Touch_Down_count < 6){
+                        Print_data(0);
+                        Touch_Down_count = 0;
+                    }
+                    break;
+            }
+        }
+        return false;
+    }
+
+//    private final Handler handler = new Handler();
+    private final Runnable runnable = new Runnable() {
+        public void run() {
+            if(Touch_Down_count > 0 && Touch_Down_count < 10)
+            {
+                Touch_Down_count++;
+                if(Touch_Down_count == 6)
+                {
+                    Print_data(1);
+                    Touch_Down_count = 0;
+                }
+                handler.postDelayed(this, 1000);
+            }
+        }
+    };
+
 }
+
