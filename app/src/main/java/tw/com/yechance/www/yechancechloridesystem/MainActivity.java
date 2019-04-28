@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         ADC_0 = ADC_Old;
     }
-    private int ADC_0 = 0,ADC_1 = 0, ADC_2 = 0, ADC_3 =0, ADC_F_Count = 0,ADC_Temp = 0,Filter_Size = 30,ADC_Old = 0;
+    private int ADC_0 = 0,ADC_1 = 0, ADC_2 = 0, ADC_3 =0, ADC_F_Count = 0,ADC_Temp = 0,Filter_Size = 5,ADC_Old = 0;
     //ADC_Filter
     private int[] ADC_Filter = new int[30]; // = Filter_Size
 
