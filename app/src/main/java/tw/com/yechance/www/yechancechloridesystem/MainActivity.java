@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Bluetooth
 
         int REQUEST_ENABLE_BT = 1; // need greater then 0
-        Main_TextView.setText("藍芽沒開拉，幹！");
+        Main_TextView.setText("藍芽未開啟！"); //藍芽沒開拉，幹
         if (mBluetoothAdapter == null) {
             Main_TextView.setText("您的裝置沒有支援藍芽");
         }
@@ -194,12 +194,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(BTSocket.isConnected()){
             btn_Main_Connect.setText("中斷連線");
             //Toast.makeText(getApplicationContext(), "連線成功 " ,	Toast.LENGTH_SHORT).show();
-            str_temp = str_temp + "BT連線成功";
+            str_temp = str_temp + "藍芽連線成功";
             btn_Main_start.setEnabled(true);
         }
         else{
             //Toast.makeText(getApplicationContext(), "連線失敗 " ,	Toast.LENGTH_SHORT).show();
-            str_temp = str_temp + "BT連線失敗";
+            str_temp = str_temp + "藍芽連線失敗";
         }
         Toast.makeText(getApplicationContext(), str_temp,	Toast.LENGTH_SHORT).show();
 
