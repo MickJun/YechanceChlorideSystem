@@ -247,7 +247,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                     Measurement_count = 120;
                     mainActivity.first_write();
                     Measurement_Start_Flag = 1;
-                    btn_meas_start.setText(getResources().getText(R.string.str_ing_test).toString() );
+                    btn_meas_start.setText(getResources().getText(R.string.str_timer).toString() + Measurement_count +  getResources().getText(R.string.str_unit_second).toString());
                     //handler.postDelayed(this.runnable, 1000);
                     if(!edit_meas_typing.getText().toString().equals("")) {
                         Keyin_double = Double.parseDouble(edit_meas_typing.getText().toString());
@@ -440,6 +440,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
             {
                 if(Measurement_count > 0){
                     Measurement_count--;
+                    btn_meas_start.setText(getResources().getText(R.string.str_timer).toString() + Measurement_count +  getResources().getText(R.string.str_unit_second).toString());
                 }
                 else
                 {
