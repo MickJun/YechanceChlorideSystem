@@ -40,6 +40,9 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
     private TextView  txt_1;
     private TextView  txt_2;
 
+    private String BackupTxT_Date;
+    private String BackupTxT_Temp;
+
     private String str_print_1,str_print_2,str_print_3,str_print_4;
     private String Str_title ="";
 //    public void Update_Status(String str_Temp1, String str_Temp2,String str_Temp3,String str_Temp4) {
@@ -86,9 +89,11 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         }
         if(txt_date == null){
             txt_date = this.findViewById(R.id.print_txt_date);
+            txt_date.setOnClickListener(this);
         }
         if(txt_temperature == null){
             txt_temperature = this.findViewById(R.id.print_txt_temp);
+            txt_temperature.setOnClickListener(this);
         }
         if(txt_typing == null){
             txt_typing = this.findViewById(R.id.print_txt_typing);
@@ -115,7 +120,9 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         txt_title.setText(bundle.getString("title"));
         Str_title = bundle.getString("title");
         txt_date.setText(bundle.getString("date"));
+        BackupTxT_Date = txt_date.getText().toString();
         txt_temperature.setText(bundle.getString("temperature"));
+        BackupTxT_Temp = txt_temperature.getText().toString();
         txt_typing.setText(bundle.getString("typing"));
         txt_1.setText(bundle.getString("txt_1"));
         if(Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
@@ -184,6 +191,26 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             case R.id.print_btn_return:
                 finish();
                 break;
+            case R.id.print_txt_date:
+                if(txt_date.getText().equals("")){
+                    //BackupTxT_Date
+                    txt_date.setText(BackupTxT_Date);
+                }
+                else{
+                    txt_date.setText("");
+                }
+                break;
+
+            case R.id.print_txt_temp:
+                if(txt_temperature.getText().equals("")){
+                    //BackupTxT_Temp
+                    txt_temperature.setText(BackupTxT_Temp);
+                }
+                else{
+                    txt_temperature.setText("");
+                }
+
+                break;
         }
     }
 
@@ -240,26 +267,30 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             {
 //                Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
 //                String str = formatter.format(curDate);
-                woyouService.printTextWithFont("       "  +"\n","",30,callback);
+                //woyouService.printTextWithFont("       "  +"\n","",30,callback);
             }
             else
             {
-                woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
+                if(!txt_date.getText().equals(""))woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
             }
-            woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
+            if(!txt_temperature.getText().equals(""))woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
             if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
                 woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
             }
             woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
             if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
-                woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",23,callback);
+                String[] strTemp=txt_2.getText().toString().split("：");
+                woyouService.printTextWithFont(strTemp[0] + "：" +"\n","",30,callback);
+                woyouService.printTextWithFont("           " + strTemp[1] +"\n","",30,callback);
+
+
             }else{
                 if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
                     woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
                 }
             }
             woyouService.printTextWithFont("*********************\n","",36,callback);
-            woyouService.printTextWithFont("會驗人員簽名\n","",30,callback);
+            //20190602 woyouService.printTextWithFont("會驗人員簽名\n","",30,callback);
             woyouService.printTextWithFont("\n","",30,callback);
             woyouService.printTextWithFont("\n","",30,callback);
             woyouService.printTextWithFont("\n","",30,callback);
@@ -290,7 +321,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             switch (v.getId()) {
                 case R.id.print_btn_print:
                     if(Touch_Down_count > 0 && Touch_Down_count < 6){
-                        Print_data(0);
+                        Print_data(1);
                         Touch_Down_count = 0;
                     }
                     break;
@@ -307,7 +338,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
                 Touch_Down_count++;
                 if(Touch_Down_count == 6)
                 {
-                    Print_data(1);
+                    Print_data(0);
                     Touch_Down_count = 0;
                 }
                 handler.postDelayed(this, 1000);

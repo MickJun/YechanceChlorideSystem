@@ -44,11 +44,22 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
     File dir = null;
     String datafilename = "data.txt";
     String settingfilename = "setting.txt";
-    String Sdata[][] = {{"水溶液氯離子含量測定","2000/12/31 00:00:00","0","00","000","0000"},
-            {"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
-            {"細粒料氯離子含量測定","2002/02/02 22:22:22","2","22","222","2222"},
-            {"水溶液氯離子含量測定","2003/03/03 33:33:33","3","33","333","3333"}
+//    String Sdata[][] = {{"細粒料氯離子含量測定","2002/02/02 22:22:22","2","22","222","2222"},
+//            {"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
+//            {"細粒料氯離子含量測定","2002/02/02 22:22:22","2","22","222","2222"},
+//            {"水溶液氯離子含量測定","2003/03/03 33:33:33","3","33","333","3333"}
+//    };
+
+    String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
+            {"26","-1208","26","-659"}
     };
+    String Readingdata[][] = {{"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"混凝土氯離子含量測定","2001年01月01日 11:11:11","1","11","111","1111"},
+            {"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"水溶液氯離子含量測定","2003年03月03日 33:33:33","3","33","333","3333"}
+    };
+
+
     File exDataFile = null;
 
     @Override
@@ -98,11 +109,12 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
         //讀取 /data/data/com.myapp/test.txt 檔案內容
         File_Read_Row_Array = readFromFiletoArray(exDataFile);
         File_Save_Array = DataArrayfomat(File_Read_Row_Array);
-        if(File_Save_Array[0][0].equals("")){
-            writeToFile(exDataFile, Sdata,Sdata.length,6);
+        if(File_Save_Array[0][0].equals("") || File_Save_Array[0][0].equals("temp0.1")){
+            writeToFile(exDataFile, Readingdata,Readingdata.length,6);
             File_Read_Row_Array = readFromFiletoArray(exDataFile);
             File_Save_Array = DataArrayfomat(File_Read_Row_Array);
         }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, LD_Datalist);
         data_ListView.setAdapter(adapter);
         data_ListView.setOnItemClickListener(onClickListView);       //指定事件 Method

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,8 +25,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
@@ -42,10 +48,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public BluetoothHeadset mBluetoothHeadset;
     public BluetoothSocket BTSocket;
 
+    //取得內部儲存體擺放檔案的目錄
+    //預設擺放目錄為 /data/data/[package.name]/file
+    File dir = null;
+    String datafilename = "data.txt";
+    String settingfilename = "setting.txt";
+    String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
+            {"26","-1208","26","-659"}
+    };
+    String Readingdata[][] = {{"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"混凝土氯離子含量測定","2001年01月01日 11:11:11","1","11","111","1111"},
+            {"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"水溶液氯離子含量測定","2003年03月03日 33:33:33","3","33","333","3333"}
+    };
+
+    File exDataFile = null;
+
+    File exSettingFile = null;
+
+    private String[][] File_Data_Array,File_Setting_Array;
+    private String[] File_Read_Row_Array;
+
 
     private ListView Main_ListView ;
     private TextView Main_TextView ;
-    private int int_Init_flag = 0;
+    private int int_Init_flag = 0,stop_first_cunnect = 0;
 
     private int tempdate[] = {
             //73.2
@@ -124,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Bluetooth
 
         int REQUEST_ENABLE_BT = 1; // need greater then 0
-        Main_TextView.setText("藍芽未開啟！"); //藍芽沒開拉，幹
+        Main_TextView.setText("找不到設備！");
         if (mBluetoothAdapter == null) {
             Main_TextView.setText("您的裝置沒有支援藍芽");
         }
@@ -132,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-                Main_TextView.setText("藍芽沒開拉，幹！");
+                Main_TextView.setText("藍芽未開啟！");//藍芽沒開拉，幹
             }
             if (mBluetoothAdapter.isDiscovering()) {
                 mBluetoothAdapter.cancelDiscovery();
@@ -161,6 +188,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Main_ListView.setAdapter(adapter);
                 Main_ListView.setOnItemClickListener(onClickListView);       //指定事件 Method
                 //Fragment1_TextView.setText("pair bluetooth is over");
+                if(BT_Devicelist.size() ==0){
+                    stop_first_cunnect = 1;
+                    return;
+                }
+                else
+                {
+                    stop_first_cunnect = 0;
+                }
                 Main_TextView.setText(BT_Devicelist.get(0));
                 btn_Main_Connect.setEnabled(true);
             }
@@ -250,6 +285,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(Main_ListView == null){
             Main_ListView = this.findViewById(R.id.main_list_bt);
         }
+
+        dir = this.getExternalFilesDir(null);
+        //開啟或建立該目錄底下的檔案
+        exDataFile = new File(dir, datafilename);
+
+        File_Read_Row_Array = readFromFiletoArray(exDataFile);
+        File_Data_Array = DataArrayfomat(File_Read_Row_Array);
+        if(File_Data_Array[0][0].equals("") || File_Data_Array[0][0].equals("temp0.1")){
+            writeToFile(exDataFile, Readingdata,Readingdata.length,6);
+            File_Read_Row_Array = readFromFiletoArray(exDataFile);
+            File_Data_Array = DataArrayfomat(File_Read_Row_Array);
+        }
+
+        exSettingFile = new File(dir, settingfilename);
+        File_Read_Row_Array = readFromFiletoArray(exSettingFile);
+        File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
+        if(File_Setting_Array[0][0].equals("") || !File_Setting_Array[0][0].equals("temp0.1") ){
+            writeToFile(exDataFile, Settingdata,Settingdata.length,4);
+            File_Read_Row_Array = readFromFiletoArray(exDataFile);
+            File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
+        }
+
 
         first_write();
         handler.postDelayed(this.runnable,200);
@@ -499,7 +556,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             if(int_Init_flag >= 3){
                 int_Init_flag = 0;
-                BT_Connecting();
+                if(stop_first_cunnect == 0)
+                {
+                    BT_Connecting();
+                }
+                else
+                {
+                    stop_first_cunnect = 0;
+                }
                 if (BTSocket != null) {
                     Intent intent = new Intent();
                     intent.setClass(MainActivity.this, PageMainMenu.class);
@@ -535,5 +599,113 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             decorView.setSystemUiVisibility(uiOptions);
         }
 
+    }
+
+    //writeToFile 方法如下
+    private void writeToFile(File fout, String data[][], int Row_length,int Cell_length) {
+        try{
+            //建立FileOutputStream物件，路徑為SD卡中的output.txt
+            FileOutputStream output = new FileOutputStream(fout);
+
+            for (int i = 0; i < Row_length; i++) {
+                if(!data[i][0].equals("")) {
+                    for (int j = 0; j < Cell_length; j++) {
+                        output.write(data[i][j].getBytes());
+                        output.write(",".getBytes());
+                    }
+                    output.write("\r\n".getBytes());
+                }
+            }
+            output.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //檢查外部儲存體是否可以進行寫入
+    public boolean isExtStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    //檢查外部儲存體是否可以進行讀取
+    public boolean isExtStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+    //readFromFile 方法如下
+    private String readFromFile(File fin) {
+        StringBuilder data = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(fin), "utf-8"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                data.append(line);
+            }
+        } catch (Exception e) {
+            ;
+        } finally {
+            try {
+                reader.close();
+            } catch (Exception e) {
+                ;
+            }
+        }
+        return data.toString();
+    }
+
+
+
+
+    //readFromFile 方法如下
+    private String[] readFromFiletoArray(File fin) {
+        StringBuilder data3 = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(fin), "utf-8"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                data3.append(line + "\r\n");
+            }
+        } catch (Exception e) {
+        } finally {
+            try {
+                reader.close();
+            } catch (Exception e) {
+            }
+        }
+
+        ArrayList<String> stringArray = new ArrayList<String>();
+
+        String[] splitArray = data3.toString().split("\r\n");
+
+        for (int i = 0; i < splitArray.length; i++) {
+
+            stringArray.add(splitArray[i]);
+        }
+        return splitArray;
+    }
+
+
+    private String[][] DataArrayfomat(String[] inArray)
+    {
+        String[][] retrunArray = new String[inArray.length + 1][6];  //inArray.length + 1 for save
+        for(int i=0; i<inArray.length;i++){
+            String[] splitArray = inArray[i].split(",");
+            for(int j=0; j<splitArray.length;j++){
+                retrunArray[i][j] = splitArray[j];
+            }
+        }
+        return retrunArray;
     }
 }

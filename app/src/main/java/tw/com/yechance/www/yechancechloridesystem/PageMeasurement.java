@@ -41,7 +41,10 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
     private TextView  txt_meas_title;
     private TextView  txt_meas_date;
+    private String  txt_date_Backup;
+    private int Show_Date = 1;
     private TextView  txt_meas_temperature;
+    private int Show_temperature = 1;
 
     private EditText  edit_meas_typing;
     private TextView  txt_meas_typing_title;
@@ -67,11 +70,10 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
     String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
             {"26","-1208","26","-659"}
     };
-
-    String Readingdata[][] = {{"水溶液氯離子含量測定","2000/12/31 00:00:00","0","00","000","0000"},
-            {"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
-            {"細粒料氯離子含量測定","2002/02/02 22:22:22","2","22","222","2222"},
-            {"水溶液氯離子含量測定","2003/03/03 33:33:33","3","33","333","3333"}
+    String Readingdata[][] = {{"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"混凝土氯離子含量測定","2001年01月01日 11:11:11","1","11","111","1111"},
+            {"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"水溶液氯離子含量測定","2003年03月03日 33:33:33","3","33","333","3333"}
     };
 
     File exDataFile = null;
@@ -130,9 +132,11 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
         }
         if(txt_meas_date == null){
             txt_meas_date = this.findViewById(R.id.measurement_txt_date);
+            txt_meas_date.setOnClickListener(this);
         }
         if(txt_meas_temperature == null){
             txt_meas_temperature = this.findViewById(R.id.measurement_txt_temp);
+            txt_meas_temperature.setOnClickListener(this);
         }
         if(edit_meas_typing == null){
             edit_meas_typing = this.findViewById(R.id.measurement_editText_typing);
@@ -159,8 +163,8 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
         File_Read_Row_Array = readFromFiletoArray(exDataFile);
         File_Data_Array = DataArrayfomat(File_Read_Row_Array);
-        if(File_Data_Array[0][0].equals("")){
-            writeToFile(exDataFile, Readingdata,Readingdata.length,4);
+        if(File_Data_Array[0][0].equals("") || File_Data_Array[0][0].equals("temp0.1")){
+            writeToFile(exDataFile, Readingdata,Readingdata.length,6);
             File_Read_Row_Array = readFromFiletoArray(exDataFile);
             File_Data_Array = DataArrayfomat(File_Read_Row_Array);
         }
@@ -168,8 +172,8 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
         exSettingFile = new File(dir, settingfilename);
         File_Read_Row_Array = readFromFiletoArray(exSettingFile);
         File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
-        if(File_Setting_Array[0][0].equals("")){
-            writeToFile(exDataFile, Settingdata,Settingdata.length,6);
+        if(File_Setting_Array[0][0].equals("") || !File_Setting_Array[0][0].equals("temp0.1") ){
+            writeToFile(exDataFile, Settingdata,Settingdata.length,4);
             File_Read_Row_Array = readFromFiletoArray(exDataFile);
             File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
         }
@@ -180,7 +184,9 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
         Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
         String str = formatter.format(curDate);
+        txt_date_Backup = str;
         txt_meas_date.setText(str);
+
 
         Get_Int_Tmperature = mainActivity.readADC(1);
         Get_Str_tmperature = Integer.toString(Get_Int_Tmperature);
@@ -243,7 +249,8 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 {
                     Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
                     String str = formatter.format(curDate);
-                    txt_meas_date.setText(str);
+                    txt_date_Backup = str;
+                    if(Show_Date == 1)txt_meas_date.setText(str);
                     Measurement_count = 120;
                     mainActivity.first_write();
                     Measurement_Start_Flag = 1;
@@ -262,7 +269,8 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 {
                     Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
                     String str = formatter.format(curDate);
-                    txt_meas_date.setText(str);
+                    txt_date_Backup = str;
+                    if(Show_Date == 1)txt_meas_date.setText(str);
                     Measurement_count = 0;
                     Measurement_Start_Flag = 0;
                     //txt_calib_timer.setText(getResources().getText(R.string.str_timer).toString() + Calibration_count + getResources().getText(R.string.str_unit_second).toString());
@@ -277,7 +285,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 if(Get_Str_EndData.equals("")){Get_Str_EndData = "0";} //最後一個參數必須要有值 因此 End不可為""
                 //{"混凝土氯離子含量測定","2001/01/01 11:11:11","1","11","111","1111"},
                 File_Data_Array[File_Data_Array.length -1][0] = txt_meas_title.getText().toString();
-                File_Data_Array[File_Data_Array.length -1][1] = txt_meas_date.getText().toString();
+                File_Data_Array[File_Data_Array.length -1][1] = txt_date_Backup; //txt_meas_date.getText().toString()
                 File_Data_Array[File_Data_Array.length -1][2] = Get_Str_tmperature;
                 File_Data_Array[File_Data_Array.length -1][3] = Get_Str_Keyin;
                 File_Data_Array[File_Data_Array.length -1][4] = Get_Str_Sensor;
@@ -321,6 +329,31 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.measurement_btn_return:
                 finish();
+                break;
+
+            case R.id.measurement_txt_temp:
+                if(txt_meas_temperature.getText().equals("")){
+                    txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString());
+                    Show_temperature = 1;
+                }
+                else {
+                    txt_meas_temperature.setText("");
+                    Show_temperature = 0;
+                }
+//                if(txt_meas_temperature.isCursorVisible())txt_meas_temperature.setVisibility(View.INVISIBLE);
+//                else txt_meas_temperature.setVisibility(View.VISIBLE);
+                break;
+                //txt_meas_temperature
+
+            case R.id.measurement_txt_date:
+                if(txt_meas_date.getText().equals("")){
+                    txt_meas_date.setText(txt_date_Backup);
+                    Show_Date = 1;
+                }
+                else {
+                    txt_meas_date.setText("");
+                    Show_Date = 0;
+                }
                 break;
         }
     }
@@ -446,7 +479,8 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 {
                     Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
                     String str = formatter.format(curDate);
-                    txt_meas_date.setText(str);
+                    txt_date_Backup = str;
+                    if(Show_Date == 1)txt_meas_date.setText(str);
                     btn_meas_start.setText(getResources().getText(R.string.str_end_test).toString() );
                     btn_meas_start.setEnabled(false);
                     btn_meas_Print.setEnabled(true);
@@ -457,7 +491,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
                 Get_Int_Tmperature = mainActivity.readADC(1);
                 Get_Str_tmperature = Integer.toString(Get_Int_Tmperature);
-                txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                if(Show_temperature == 1)txt_meas_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
 
                 Get_Int_Sensor = mainActivity.readADC(0); // = CL
                 //Setting_Slope = (Integer.parseInt(File_Setting_Array[1][3]) - Integer.parseInt(File_Setting_Array[1][1])) / 0.4f;

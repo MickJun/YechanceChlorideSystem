@@ -42,10 +42,18 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
     //取得內部儲存體擺放檔案的目錄
     //預設擺放目錄為 /data/data/[package.name]/file
     File dir = null;
-    //String datafilename = "data.txt";
+    String datafilename = "data.txt";
     String settingfilename = "setting.txt";
-    String Sdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
+//    String Sdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
+////            {"26","-1208","26","-659"}
+////    };
+    String Settingdata[][] = {{"temp0.1","0.1%","temp0.5","0.5%"},   //0.05% , 0.1% , 0.5%
             {"26","-1208","26","-659"}
+    };
+    String Readingdata[][] = {{"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"混凝土氯離子含量測定","2001年01月01日 11:11:11","1","11","111","1111"},
+            {"細粒料氯離子含量測定","2002年02月02日 22:22:22","2","22","222","2222"},
+            {"水溶液氯離子含量測定","2003年03月03日 33:33:33","3","33","333","3333"}
     };
 
     File exDataFile = null;
@@ -116,12 +124,11 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         dir = this.getExternalFilesDir(null);
         //開啟或建立該目錄底下的檔案
         exDataFile = new File(dir, settingfilename);
-
         //讀取 /data/data/com.myapp/test.txt 檔案內容
         File_Read_Row_Array = readFromFiletoArray(exDataFile);
         File_Save_Array = DataArrayfomat(File_Read_Row_Array);
-        if(File_Save_Array[0][0].equals("")){
-            writeToFile(exDataFile, Sdata,Sdata.length,4);
+        if(File_Save_Array[0][0].equals("") || !File_Save_Array[0][0].equals("temp0.1")){
+            writeToFile(exDataFile, Settingdata,Settingdata.length,4);
             File_Read_Row_Array = readFromFiletoArray(exDataFile);
             File_Save_Array = DataArrayfomat(File_Read_Row_Array);
         }
