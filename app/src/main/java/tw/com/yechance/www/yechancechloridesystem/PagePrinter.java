@@ -281,7 +281,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
                 String[] strTemp=txt_2.getText().toString().split("：");
                 woyouService.printTextWithFont(strTemp[0] + "：" +"\n","",30,callback);
-                woyouService.printTextWithFont("           " + strTemp[1] +"\n","",30,callback);
+                woyouService.printTextWithFont("        " + strTemp[1] +"\n","",30,callback);
 
 
             }else{

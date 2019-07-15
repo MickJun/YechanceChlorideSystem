@@ -140,7 +140,8 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
                 {
                     txt_meas_typing   = getResources().getText(R.string.str_water_unit).toString() + File_Save_Array[List_Select_Point][3] + getResources().getText(R.string.str_unit_kgm3).toString();
                     txt_meas_1 = getResources().getText(R.string.str_water_cl).toString() + File_Save_Array[List_Select_Point][4] + getResources().getText(R.string.str_unit_percentage).toString();
-                    txt_meas_2 = getResources().getText(R.string.str_CC_summarize).toString() + File_Save_Array[List_Select_Point][5] + getResources().getText(R.string.str_unit_percentage).toString();
+                    txt_meas_2 = getResources().getText(R.string.str_CC_summarize).toString() + File_Save_Array[List_Select_Point][5] + getResources().getText(R.string.str_unit_kgm3).toString(); //2019/7/15 Mick
+                    //2019/7/15 Mick  txt_meas_2 = getResources().getText(R.string.str_CC_summarize).toString() + File_Save_Array[List_Select_Point][5] + getResources().getText(R.string.str_unit_percentage).toString();
 
 
                 }
