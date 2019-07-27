@@ -65,14 +65,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_print" />
+            android:text="@string/str_print"
+            android:textSize="30sp"/>
         <Button
             android:id="@+id/print_btn_return"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_return" />
+            android:text="@string/str_return"
+            android:textSize="30sp"/>
     </LinearLayout>
 
 

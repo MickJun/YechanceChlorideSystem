@@ -336,7 +336,7 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
             for(int j=0; j<splitArray.length;j++){
                 retrunArray[i][j] = splitArray[j];
             }
-            LD_Datalist.add(retrunArray[i][0] + "：" + retrunArray[i][1] );
+            LD_Datalist.add(retrunArray[i][0] + "：" + "\r\n" + retrunArray[i][1] );
         }
         if(retrunArray[0][0].equals("")){
             LD_Datalist.clear();

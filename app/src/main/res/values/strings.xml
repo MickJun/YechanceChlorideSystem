@@ -9,6 +9,7 @@
     <string name="str_calibration">校正</string>
     <string name="str_measurement">量測</string>
     <string name="str_load_delete_data">資料查詢</string>
+    <string name="str_data_average">資料平均</string>
     <string name="str_system_set_up">系統設定</string>
     <string name="str_print">列印</string>
     <string name="str_save_print">儲存並列印</string>
@@ -51,5 +52,7 @@
     <string name="str_end_program">結束程式</string>
     <string name="str_auto_connect">自動連線</string>
     <string name="str_Entry_menu">進入選單</string>
+    <string name="str_average">平均</string>
+    <string name="str_clean">清除</string>
 
 </resources>

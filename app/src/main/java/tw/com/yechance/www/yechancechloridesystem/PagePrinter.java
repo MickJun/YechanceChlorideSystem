@@ -143,6 +143,9 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         startService(intent_P);//启动打印服务
         bindService(intent_P, connService, Context.BIND_AUTO_CREATE);
 
+        //20170724 add
+        txt_date.setText("");
+        txt_temperature.setText("");
     }
     @Override
     public void onDestroy() {
@@ -320,7 +323,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             Log.d("test", v.getId() + " button ---> release");
             switch (v.getId()) {
                 case R.id.print_btn_print:
-                    if(Touch_Down_count > 0 && Touch_Down_count < 6){
+                    if(Touch_Down_count > 0 && Touch_Down_count < 3){   //20190727 6>>3
                         Print_data(1);
                         Touch_Down_count = 0;
                     }
@@ -336,7 +339,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
             if(Touch_Down_count > 0 && Touch_Down_count < 10)
             {
                 Touch_Down_count++;
-                if(Touch_Down_count == 6)
+                if(Touch_Down_count == 3) //20190727 6>>3
                 {
                     Print_data(0);
                     Touch_Down_count = 0;

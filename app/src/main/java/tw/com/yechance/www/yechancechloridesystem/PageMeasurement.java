@@ -55,7 +55,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 //    private String  Get_title,Get_Str_tmpeture,Str_for_Temp;
 ////    private int     Get_int_tmpeture;
 
-    private String  Get_title = "",Get_Str_tmperature = "", Get_Str_Sensor = "",Str_for_Temp = "",Get_Str_Keyin = "",Get_Str_EndData = "0"; //end 不能為""
+    private String  Get_title = "",Get_Str_tmperature = "", Get_Str_Sensor = "",Str_for_Temp = "",Get_Str_Keyin = "",Get_Str_EndData = "0", Get_ShowDate = "NO"; //end 不能為""
     private int     Get_Int_Tmperature, Get_Int_Sensor,Get_Int_Keyin;
 
     double Setting_Slope = 0, txt1_double = 0,Keyin_double = 0, txt2_double = 0, intercept = 0;
@@ -195,6 +195,16 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
         //取的intent中的bundle物件
         Bundle bundle =this.getIntent().getExtras();
         Get_title = bundle.getString("title");
+        Get_ShowDate = bundle.getString("ShowDate");
+
+        if(Get_ShowDate.equals("NO"))
+        {
+            txt_meas_temperature.setText("");
+            Show_temperature = 0;
+            txt_meas_date.setText("");
+            Show_Date = 0;
+        }
+
         if(Get_title.equals("M_CC"))
         {
             txt_meas_title.setText(R.string.str_measurement_concrete_chloride);

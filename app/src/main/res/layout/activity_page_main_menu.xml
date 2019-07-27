@@ -19,7 +19,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_calibration0D1" />
+            android:text="@string/str_calibration0D1"
+            android:textSize="30sp"  />
 
 
 
@@ -29,7 +30,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_calibration0D5" />
+            android:text="@string/str_calibration0D5"
+            android:textSize="30sp" />
 
 
         <Button
@@ -38,29 +40,52 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_measurement_concrete_chloride" />
+            android:text="@string/str_measurement_concrete_chloride"
+            android:textSize="30sp" />
         <Button
             android:id="@+id/menu_btn_measurement_FAC"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_measurement_fine_aggregate_chloride" />
+            android:text="@string/str_measurement_fine_aggregate_chloride"
+            android:textSize="30sp" />
         <Button
             android:id="@+id/menu_btn_measurement_WC"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_measurement_water_chloride" />
+            android:text="@string/str_measurement_water_chloride"
+            android:textSize="30sp" />
 
-        <Button
-            android:id="@+id/menu_btn_load_delete_data"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_load_delete_data" />
+            android:layout_height="90dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/menu_btn_load_delete_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="style=@style/Widget.AppCompat.Button"
+                android:text="@string/str_load_delete_data"
+                android:textSize="30sp" />
+
+
+            <Button
+                android:id="@+id/menu_btn_syatem_set_up"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="style=@style/Widget.AppCompat.Button"
+                android:text="@string/str_data_average"
+                android:textSize="30sp" />
+
+
+        </LinearLayout>
 
 
         <Button
@@ -69,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_return" />
+            android:text="@string/str_return"
+            android:textSize="30sp"/>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

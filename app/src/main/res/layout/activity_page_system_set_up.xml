@@ -6,4 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".PageSystemSetUp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/ave_btn_return"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="style=@style/Widget.AppCompat.Button"
+                android:text="@string/str_return"
+                android:textSize="30sp"/>
+
+            <Button
+                android:id="@+id/ave_btn_ave"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="style=@style/Widget.AppCompat.Button"
+                android:text="@string/str_average"
+                android:textSize="30sp"/>
+
+            <Button
+                android:id="@+id/ave_btn_clear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="style=@style/Widget.AppCompat.Button"
+                android:text="@string/str_clean"
+                android:textSize="30sp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ave_txt_select1"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/lemonchiffon"
+                android:text="@string/str_select_data"
+                android:textSize="15sp"
+                android:textColor="@color/red"/>
+            <TextView
+                android:id="@+id/ave_txt_select2"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sandybrown"
+                android:text="@string/str_select_data"
+                android:textSize="15sp"
+                android:textColor="@color/gray"/>
+            <TextView
+                android:id="@+id/ave_txt_select3"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/darkseagreen"
+                android:text="@string/str_select_data"
+                android:textSize="15sp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <ListView
+                android:id="@+id/ave_list_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

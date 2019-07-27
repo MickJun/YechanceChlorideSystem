@@ -49,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_start_calibration" />
+            android:text="@string/str_start_calibration"
+            android:textSize="30sp"/>
 
         <Button
             android:id="@+id/calibration_btn_sure"
@@ -57,7 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_sure" />
+            android:text="@string/str_sure"
+            android:textSize="30sp"/>
 
         <Button
             android:id="@+id/calibration_btn_re_calibration"
@@ -65,7 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_re_calibration" />
+            android:text="@string/str_re_calibration"
+            android:textSize="30sp"/>
 
         <Button
             android:id="@+id/calibration_btn_return"
@@ -73,7 +76,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_return" />
+            android:text="@string/str_return"
+            android:textSize="30sp"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

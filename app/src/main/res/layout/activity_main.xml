@@ -22,7 +22,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_end_program" />
+                android:text="@string/str_end_program"
+                android:textSize="23sp"/>
 
             <Button
             android:id="@+id/main_btn_connect"
@@ -30,7 +31,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_auto_connect" />
+            android:text="@string/str_auto_connect"
+                android:textSize="23sp" />
 
             <Button
                 android:id="@+id/main_btn_start"
@@ -38,7 +40,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="style=@style/Widget.AppCompat.Button"
-                android:text="@string/str_Entry_menu" />
+                android:text="@string/str_Entry_menu"
+                android:textSize="23sp"/>
 
 
         </LinearLayout>

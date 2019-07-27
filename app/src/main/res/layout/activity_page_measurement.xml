@@ -94,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_start_test" />
+            android:text="@string/str_start_test"
+            android:textSize="30sp"/>
 
         <Button
             android:id="@+id/measurement_btn_print"
@@ -102,7 +103,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_save_print" />
+            android:text="@string/str_save_print"
+            android:textSize="30sp"/>
 
         <Button
             android:id="@+id/measurement_btn_retest"
@@ -110,14 +112,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/str_re_test" />
+            android:text="@string/str_re_test"
+            android:textSize="30sp"/>
         <Button
             android:id="@+id/measurement_btn_return"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="style=@style/Widget.AppCompat.Button"
-            android:text="@string/str_return" />
+            android:text="@string/str_return"
+            android:textSize="30sp"/>
 
     </LinearLayout>
 
