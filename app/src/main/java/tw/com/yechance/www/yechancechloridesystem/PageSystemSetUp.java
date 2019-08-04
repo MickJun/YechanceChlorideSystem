@@ -203,25 +203,39 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
                 String Strm1 =  df.format(PAll_m1);
                 String Strm2 =  df.format(PAll_m2);
 
+                String Strinput1 = "", Strinput2 = "",Strinput3 = "";
+
+
                 if(txt_meas_title.equals("混凝土氯離子含量測定"))
                 {
+//                    txt_meas_title = getResources().getText(R.string.str_measurement_concrete_chloride_ave).toString();
                     txt_meas_0   = getResources().getText(R.string.str_water_unit).toString() + Strm0 + getResources().getText(R.string.str_unit_kgm3).toString();
-                    txt_meas_1 = getResources().getText(R.string.str_water_cl).toString() + Strm1 + getResources().getText(R.string.str_unit_percentage).toString();
-                    txt_meas_2 = getResources().getText(R.string.str_CC_summarize).toString() + Strm2 + getResources().getText(R.string.str_unit_kgm3).toString(); //2019/7/15 Mick
+                    txt_meas_1 = getResources().getText(R.string.str_water_cl_ave).toString() + Strm1 + getResources().getText(R.string.str_unit_percentage).toString();
+                    txt_meas_2 = getResources().getText(R.string.str_CC_summarize_ave).toString() + Strm2 + getResources().getText(R.string.str_unit_kgm3).toString(); //2019/7/15 Mick
                     //2019/7/15 Mick  txt_meas_2 = getResources().getText(R.string.str_CC_summarize).toString() + File_Save_Array[List_Select_Point][5] + getResources().getText(R.string.str_unit_percentage).toString();
-
+                    Strinput1 = getResources().getText(R.string.str_CC_summarize_1).toString() + File_Save_Array[List_Select_Point1][5] + getResources().getText(R.string.str_unit_kgm3).toString();
+                    if(Data_count > 1)Strinput2 = getResources().getText(R.string.str_CC_summarize_2).toString() + File_Save_Array[List_Select_Point2][5] + getResources().getText(R.string.str_unit_kgm3).toString();
+                    if(Data_count > 2)Strinput3 = getResources().getText(R.string.str_CC_summarize_3).toString() + File_Save_Array[List_Select_Point3][5] + getResources().getText(R.string.str_unit_kgm3).toString();
                 }
                 else if(txt_meas_title.equals("細粒料氯離子含量測定"))
                 {
+//                    txt_meas_title = getResources().getText(R.string.str_measurement_fine_aggregate_chloride_ave).toString();
                     txt_meas_0  = getResources().getText(R.string.str_water_rate).toString() + Strm0 + getResources().getText(R.string.str_unit_percentage).toString();
-                    txt_meas_1 = getResources().getText(R.string.str_water_cl).toString() + Strm1 + getResources().getText(R.string.str_unit_percentage).toString();
-                    txt_meas_2 = getResources().getText(R.string.str_FAC_summarize).toString() + Strm2 + getResources().getText(R.string.str_unit_percentage).toString();
+                    txt_meas_1 = getResources().getText(R.string.str_water_cl_ave).toString() + Strm1 + getResources().getText(R.string.str_unit_percentage).toString();
+                    txt_meas_2 = getResources().getText(R.string.str_FAC_summarize_ave).toString() + Strm2 + getResources().getText(R.string.str_unit_percentage).toString();
+                    Strinput1 = getResources().getText(R.string.str_FAC_summarize_1).toString() + File_Save_Array[List_Select_Point1][5] + getResources().getText(R.string.str_unit_percentage).toString();
+                    if(Data_count > 1)Strinput2 = getResources().getText(R.string.str_FAC_summarize_2).toString() + File_Save_Array[List_Select_Point2][5] + getResources().getText(R.string.str_unit_percentage).toString();
+                    if(Data_count > 2)Strinput3 = getResources().getText(R.string.str_FAC_summarize_3).toString() + File_Save_Array[List_Select_Point3][5] + getResources().getText(R.string.str_unit_percentage).toString();
 
                 }
                 else if(txt_meas_title.equals("水溶液氯離子含量測定"))
                 {
-                    txt_meas_1 = getResources().getText(R.string.str_water_cl).toString() + Strm1 + getResources().getText(R.string.str_unit_percentage).toString();
-                    txt_meas_2 = getResources().getText(R.string.str_FAC_summarize).toString() + Strm2 + getResources().getText(R.string.str_unit_percentage).toString();
+//                    txt_meas_title = getResources().getText(R.string.str_measurement_water_chloride_ave).toString();
+                    txt_meas_1 = getResources().getText(R.string.str_water_cl_ave).toString() + Strm1 + getResources().getText(R.string.str_unit_percentage).toString();
+                    Strinput1 = getResources().getText(R.string.str_water_cl_1).toString() + File_Save_Array[List_Select_Point1][4] + getResources().getText(R.string.str_unit_percentage).toString();
+                    if(Data_count > 1)Strinput2 = getResources().getText(R.string.str_water_cl_2).toString() + File_Save_Array[List_Select_Point2][4] + getResources().getText(R.string.str_unit_percentage).toString();
+                    if(Data_count > 2)Strinput3 = getResources().getText(R.string.str_water_cl_3).toString() + File_Save_Array[List_Select_Point3][4] + getResources().getText(R.string.str_unit_percentage).toString();
+                    //txt_meas_2 = getResources().getText(R.string.str_FAC_summarize_ave).toString() + Strm2 + getResources().getText(R.string.str_unit_percentage).toString();
                 }
 
 
@@ -232,9 +246,13 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
                 bundle.putString("title", txt_meas_title);
                 bundle.putString("date", txt_meas_date);
                 bundle.putString("temperature", txt_meas_temperature);
-                bundle.putString("typing",txt_meas_0) ;
+                bundle.putString("typing",txt_meas_0);
                 bundle.putString("txt_1", txt_meas_1);
                 bundle.putString("txt_2", txt_meas_2);
+                bundle.putString("ave", "ave");
+                bundle.putString("input1", Strinput1);
+                bundle.putString("input2", Strinput2);
+                bundle.putString("input3", Strinput3);
                 //將Bundle物件assign給intent
                 intent_S.putExtras(bundle);
 

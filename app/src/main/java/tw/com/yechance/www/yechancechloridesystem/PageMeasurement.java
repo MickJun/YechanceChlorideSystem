@@ -56,7 +56,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 ////    private int     Get_int_tmpeture;
 
     private String  Get_title = "",Get_Str_tmperature = "", Get_Str_Sensor = "",Str_for_Temp = "",Get_Str_Keyin = "",Get_Str_EndData = "0", Get_ShowDate = "NO"; //end 不能為""
-    private int     Get_Int_Tmperature, Get_Int_Sensor,Get_Int_Keyin;
+    private int     Get_Int_Tmperature, Get_Int_Sensor,Get_Int_Keyin, Save_Flag = 0;
 
     double Setting_Slope = 0, txt1_double = 0,Keyin_double = 0, txt2_double = 0, intercept = 0;
     private DecimalFormat df = new DecimalFormat("##0.0000");
@@ -302,7 +302,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 File_Data_Array[File_Data_Array.length -1][5] = Get_Str_EndData;
 
                 writeToFile(exDataFile, File_Data_Array,File_Data_Array.length,6);
-
+                Save_Flag = 1;
 
                 //print
                 Intent intent_S = new Intent();
@@ -327,15 +327,34 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                     bundle.putString("txt_2", txt_meas_2.getText().toString());
                 }
                 //將Bundle物件assign給intent
+
+                bundle.putString("ave", "");
+                bundle.putString("input1", "");
+                bundle.putString("input2", "");
+                bundle.putString("input3", "");
+
+
                 intent_S.putExtras(bundle);
 
                 startActivity(intent_S);
                 break;
             case R.id.measurement_btn_retest:
-                Measurement_count = 120;
-                btn_meas_start.setText(getResources().getText(R.string.str_start_test).toString() );
-                btn_meas_start.setEnabled(true);
-                btn_meas_Print.setEnabled(false);
+                if(Save_Flag ==1) {
+                    Intent intent = getIntent();
+
+                    Bundle bundle_FAC = new Bundle();
+                    bundle_FAC.putString("title", Get_title);
+                    bundle_FAC.putString("ShowDate", Get_ShowDate);
+                    intent.putExtras(bundle_FAC);
+                    finish();
+                    startActivity(intent);
+                }
+                else {
+                    Measurement_count = 120;
+                    btn_meas_start.setText(getResources().getText(R.string.str_start_test).toString());
+                    btn_meas_start.setEnabled(true);
+                    btn_meas_Print.setEnabled(false);
+                }
                 break;
             case R.id.measurement_btn_return:
                 finish();

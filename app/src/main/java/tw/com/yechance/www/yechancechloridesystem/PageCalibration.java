@@ -33,9 +33,11 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
     private TextView  txt_calib_timer;
     private TextView  txt_calib_temperature;
     private TextView  txt_calib_device_read;
+    private int Show_Date = 1;
+    private int Show_temperature = 1;
 
 
-    private String  Get_title,Get_Str_tmperature, Get_Str_Sensor,Str_for_Temp;
+    private String  Get_title,Get_Str_tmperature, Get_Str_Sensor,Str_for_Temp, Get_ShowDate = "NO";
     private int     Get_Int_Tmperature, Get_Int_Sensor;
 
 
@@ -104,7 +106,6 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
             btn_calib_Re_calib.setOnClickListener(this);
         }
 
-
         if(txt_calib_title == null){
             txt_calib_title = this.findViewById(R.id.calibration_txt_title);
         }
@@ -113,6 +114,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         }
         if(txt_calib_temperature == null){
             txt_calib_temperature = this.findViewById(R.id.calibration_txt_temp);
+            txt_calib_temperature.setOnClickListener(this);
         }
         if(txt_calib_device_read == null){
             txt_calib_device_read = this.findViewById(R.id.calibration_device_read);
@@ -141,11 +143,14 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
         //取的intent中的bundle物件
         Bundle bundle =this.getIntent().getExtras();
         Get_title = bundle.getString("title");
+        Get_ShowDate = bundle.getString("ShowDate");
+
         if(Get_title.equals("C_0D1"))
         {
             txt_calib_title.setText(R.string.str_calibration0D1);
             txt_calib_title.setTextColor(getResources().getColor(R.color.red));
             txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+            Get_Str_tmperature = File_Save_Array[1][0];
             txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1]  );
         }
         else if(Get_title.equals("C_0D5"))
@@ -153,8 +158,16 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
             txt_calib_title.setText(R.string.str_calibration0D5);
             txt_calib_title.setTextColor(getResources().getColor(R.color.red));
             txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+            Get_Str_tmperature = File_Save_Array[1][2];
             txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3]
             );
+        }
+        if(Get_ShowDate.equals("NO"))
+        {
+            txt_calib_temperature.setText("");
+            Show_temperature = 0;
+//            txt_meas_date.setText("");
+//            Show_Date = 0;
         }
 
 
@@ -235,6 +248,20 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
             case R.id.calibration_btn_return:
                 finish();
                 break;
+
+            case R.id.calibration_txt_temp:
+                if(txt_calib_temperature.getText().equals("")){
+                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString());
+                    Show_temperature = 1;
+                }
+                else {
+                    txt_calib_temperature.setText("");
+                    Show_temperature = 0;
+                }
+//                if(txt_meas_temperature.isCursorVisible())txt_meas_temperature.setVisibility(View.INVISIBLE);
+//                else txt_meas_temperature.setVisibility(View.VISIBLE);
+                break;
+
         }
     }
 
@@ -367,7 +394,7 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
 
                 Get_Int_Tmperature = mainActivity.readADC(1);
                 Get_Str_tmperature = Integer.toString(Get_Int_Tmperature);
-                txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                if(Show_temperature == 1)txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + Get_Str_tmperature + getResources().getText(R.string.str_unit_tmpeC).toString() );
 
                 Get_Int_Sensor = mainActivity.readADC(0);
                 Get_Str_Sensor = Integer.toString(Get_Int_Sensor);

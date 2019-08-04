@@ -44,7 +44,8 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
     private String BackupTxT_Temp;
 
     private String str_print_1,str_print_2,str_print_3,str_print_4;
-    private String Str_title ="";
+    private String Str_title ="",Str_Date="",Str_Temp="",Str_m0="",Str_m1="",Str_m2="";
+    private String Str_ave ="",Str_input1 ="",Str_input2 ="",Str_input3 ="";
 //    public void Update_Status(String str_Temp1, String str_Temp2,String str_Temp3,String str_Temp4) {
 //        str_print_1 = str_Temp1;
 //        str_print_2 = str_Temp2;
@@ -125,6 +126,14 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         BackupTxT_Temp = txt_temperature.getText().toString();
         txt_typing.setText(bundle.getString("typing"));
         txt_1.setText(bundle.getString("txt_1"));
+
+        Str_ave = bundle.getString("ave");
+        Str_input1 = bundle.getString("input1");
+        Str_input2 = bundle.getString("input2");
+        Str_input3 = bundle.getString("input3");
+
+
+
         if(Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
             txt_2.setText("");
         }else{
@@ -146,6 +155,24 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
         //20170724 add
         txt_date.setText("");
         txt_temperature.setText("");
+
+
+        if(Str_ave.equals("ave")){
+            txt_title.setText(txt_title.getText() + getResources().getText(R.string.str_average).toString());
+            txt_date.setText(bundle.getString("input1"));
+            txt_date.setTextSize(20);
+            txt_temperature.setText(bundle.getString("input2"));
+            txt_temperature.setTextSize(20);
+            txt_typing.setText(bundle.getString("input3"));
+            txt_typing.setTextSize(20);
+            if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                txt_1.setText("");
+            }
+            txt_1.setTextSize(20);
+            txt_2.setTextSize(20);
+
+        }
+
     }
     @Override
     public void onDestroy() {
@@ -195,6 +222,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
                 finish();
                 break;
             case R.id.print_txt_date:
+                if(Str_ave.equals("ave")){break;}
                 if(txt_date.getText().equals("")){
                     //BackupTxT_Date
                     txt_date.setText(BackupTxT_Date);
@@ -205,6 +233,7 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
                 break;
 
             case R.id.print_txt_temp:
+                if(Str_ave.equals("ave")){break;}
                 if(txt_temperature.getText().equals("")){
                     //BackupTxT_Temp
                     txt_temperature.setText(BackupTxT_Temp);
@@ -265,31 +294,52 @@ public class PagePrinter extends AppCompatActivity  implements View.OnClickListe
 
     public void Print_data(int Now_date){
         try{
-            woyouService.printTextWithFont("**" + txt_title.getText().toString() + "**\n","",30,callback);
-            if(Now_date == 1)
-            {
+            if(Str_ave.equals("ave") ){
+                woyouService.printTextWithFont("*" + txt_title.getText().toString() + "*\n","",28,callback);
+                if(Now_date == 0)
+                {
+//                    woyouService.printTextWithFont(BackupTxT_Date +"\n","",30,callback);
+//                    woyouService.printTextWithFont(BackupTxT_Temp +"\n","",30,callback);
+                }
+                woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",22,callback);
+                if(!txt_temperature.equals(""))woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",22,callback);
+                if(!txt_typing.equals(""))woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",22,callback);
+                woyouService.printTextWithFont("_____________________\n","",36,callback);
+                if(Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                    woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",22,callback);
+                }else{
+                    woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",22,callback);
+                }
+
+
+            }
+            else{
+                woyouService.printTextWithFont("**" + txt_title.getText().toString() + "**\n","",30,callback);
+                if(Now_date == 1)
+                {
 //                Date curDate = new Date(System.currentTimeMillis()) ; // 獲取當前時間
 //                String str = formatter.format(curDate);
-                //woyouService.printTextWithFont("       "  +"\n","",30,callback);
-            }
-            else
-            {
-                if(!txt_date.getText().equals(""))woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
-            }
-            if(!txt_temperature.getText().equals(""))woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
-            if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
-                woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
-            }
-            woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
-            if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
-                String[] strTemp=txt_2.getText().toString().split("：");
-                woyouService.printTextWithFont(strTemp[0] + "：" +"\n","",30,callback);
-                woyouService.printTextWithFont("        " + strTemp[1] +"\n","",30,callback);
-
-
-            }else{
+                    //woyouService.printTextWithFont("       "  +"\n","",30,callback);
+                }
+                else
+                {
+                    if(!txt_date.getText().equals(""))woyouService.printTextWithFont(txt_date.getText().toString()  +"\n","",30,callback);
+                }
+                if(!txt_temperature.getText().equals(""))woyouService.printTextWithFont(txt_temperature.getText().toString()  +"\n","",30,callback);
                 if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
-                    woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
+                    woyouService.printTextWithFont(txt_typing.getText().toString()  +"\n","",30,callback);
+                }
+                woyouService.printTextWithFont(txt_1.getText().toString()  +"\n","",30,callback);
+                if(Str_title.equals(getResources().getText(R.string.str_measurement_concrete_chloride))){
+                    String[] strTemp=txt_2.getText().toString().split("：");
+                    woyouService.printTextWithFont(strTemp[0] + "：" +"\n","",30,callback);
+                    woyouService.printTextWithFont("        " + strTemp[1] +"\n","",30,callback);
+
+
+                }else{
+                    if(!Str_title.equals(getResources().getText(R.string.str_measurement_water_chloride))){
+                        woyouService.printTextWithFont(txt_2.getText().toString()  +"\n","",30,callback);
+                    }
                 }
             }
             woyouService.printTextWithFont("*********************\n","",36,callback);

@@ -169,6 +169,10 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
                 bundle.putString("typing",txt_meas_typing) ;
                 bundle.putString("txt_1", txt_meas_1);
                 bundle.putString("txt_2", txt_meas_2);
+                bundle.putString("ave", "");
+                bundle.putString("input1", "");
+                bundle.putString("input2", "");
+                bundle.putString("input3", "");
                 //將Bundle物件assign給intent
                 intent_S.putExtras(bundle);
 

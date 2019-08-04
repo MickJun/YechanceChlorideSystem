@@ -65,11 +65,13 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
 
         if(btn_menu_calibration0D1 == null) {
             btn_menu_calibration0D1 = this.findViewById(R.id.menu_btn_calibration_0D1);
-            btn_menu_calibration0D1.setOnClickListener(this);
+            //btn_menu_calibration0D1.setOnClickListener(this);
+            btn_menu_calibration0D1.setOnTouchListener(this);
         }
         if(btn_menu_calibration0D5 == null) {
             btn_menu_calibration0D5 = this.findViewById(R.id.menu_btn_calibration_0D5);
-            btn_menu_calibration0D5.setOnClickListener(this);
+            //btn_menu_calibration0D5.setOnClickListener(this);
+            btn_menu_calibration0D5.setOnTouchListener(this);
         }
         if(btn_menu_measurement_CC == null) {
             btn_menu_measurement_CC = this.findViewById(R.id.menu_btn_measurement_CC);
@@ -132,16 +134,16 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
                 intent_0D5.putExtras(bundle_0D5);
                 startActivity(intent_0D5);
                 break;
-            case R.id.menu_btn_measurement_CC:
-                Intent intent_CC = new Intent();
-                intent_CC.setClass(PageMainMenu.this, PageMeasurement.class);
-                //new一個Bundle物件，並將要傳遞的資料傳入
-                Bundle bundle_CC = new Bundle();
-                bundle_CC.putString("title", "M_CC");
-                //將Bundle物件assign給intent
-                intent_CC.putExtras(bundle_CC);
-                startActivity(intent_CC);
-                break;
+//            case R.id.menu_btn_measurement_CC:
+//                Intent intent_CC = new Intent();
+//                intent_CC.setClass(PageMainMenu.this, PageMeasurement.class);
+//                //new一個Bundle物件，並將要傳遞的資料傳入
+//                Bundle bundle_CC = new Bundle();
+//                bundle_CC.putString("title", "M_CC");
+//                //將Bundle物件assign給intent
+//                intent_CC.putExtras(bundle_CC);
+//                startActivity(intent_CC);
+//                break;
 //            case R.id.menu_btn_measurement_FAC:
 //                Intent intent_FAC = new Intent();
 //                //intent_S.setClass(PageMainMenu.this, PageSystemSetUp.class);
@@ -196,6 +198,22 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
     public boolean onTouch(View v, MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             switch (v.getId()) {
+                case R.id.menu_btn_calibration_0D1:
+                    if(Touch_Down_count == 0){
+                        Touch_Down_count = 1;
+                        Thouch_Dowm_Function = 4;
+                        handler.postDelayed(runnable,1000);
+                    }
+                    break;
+                case R.id.menu_btn_calibration_0D5:
+                    if(Touch_Down_count == 0){
+                        Touch_Down_count = 1;
+                        Thouch_Dowm_Function = 5;
+                        handler.postDelayed(runnable,1000);
+                    }
+                    break;
+
+
                 case R.id.menu_btn_measurement_CC:
                     if(Touch_Down_count == 0){
                         Touch_Down_count = 1;
@@ -225,6 +243,18 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
         if(event.getAction() == MotionEvent.ACTION_UP) {
             Log.d("test", v.getId() + " button ---> release");
             switch (v.getId()) {
+                case R.id.menu_btn_calibration_0D1:
+                    if(Touch_Down_count > 0 && Touch_Down_count < 3){   //20190727 6>>3
+                        Run_Page(4,"NO");
+                        Touch_Down_count = 0;
+                    }
+                    break;
+                case R.id.menu_btn_calibration_0D5:
+                    if(Touch_Down_count > 0 && Touch_Down_count < 3){   //20190727 6>>3
+                        Run_Page(5,"NO");
+                        Touch_Down_count = 0;
+                    }
+                    break;
 
                 case R.id.menu_btn_measurement_CC:
                     if(Touch_Down_count > 0 && Touch_Down_count < 3){   //20190727 6>>3
@@ -291,6 +321,29 @@ public class PageMainMenu extends AppCompatActivity implements View.OnClickListe
                 intent_WC.putExtras(bundle_WC);
                 startActivity(intent_WC);
                 break;
+            case 4://R.id.menu_btn_calibration_0D1:
+                Intent intent_0D1 = new Intent();
+                intent_0D1.setClass(PageMainMenu.this, PageCalibration.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_0D1 = new Bundle();
+                bundle_0D1.putString("title", "C_0D1");
+                bundle_0D1.putString("ShowDate", ShowDate);
+                //將Bundle物件assign給intent
+                intent_0D1.putExtras(bundle_0D1);
+                startActivity(intent_0D1);
+                break;
+            case 5://R.id.menu_btn_calibration_0D5:
+                Intent intent_0D5 = new Intent();
+                intent_0D5.setClass(PageMainMenu.this, PageCalibration.class);
+                //new一個Bundle物件，並將要傳遞的資料傳入
+                Bundle bundle_0D5 = new Bundle();
+                bundle_0D5.putString("title", "C_0D5");
+                bundle_0D5.putString("ShowDate", ShowDate);
+                //將Bundle物件assign給intent
+                intent_0D5.putExtras(bundle_0D5);
+                startActivity(intent_0D5);
+                break;
+
         }
     }
 
