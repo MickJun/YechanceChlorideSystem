@@ -204,14 +204,14 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                 if(Get_title.equals("C_0D1"))
                 {
                     File_Save_Array[1][0] = Get_Str_tmperature;
-                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    if(Show_temperature == 1)txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     File_Save_Array[1][1] = Get_Str_Sensor;
                     txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1] );
                 }
                 else if(Get_title.equals("C_0D5"))
                 {
                     File_Save_Array[1][2] = Get_Str_tmperature;
-                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    if(Show_temperature == 1)txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     File_Save_Array[1][3] = Get_Str_Sensor;
                     txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3] );
                 }
@@ -233,14 +233,14 @@ public class PageCalibration extends AppCompatActivity  implements View.OnClickL
                 {
                     txt_calib_title.setText(R.string.str_calibration0D1);
                     txt_calib_title.setTextColor(getResources().getColor(R.color.red));
-                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    if(Show_temperature == 1)txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][0] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][1]  );
                 }
                 else if(Get_title.equals("C_0D5"))
                 {
                     txt_calib_title.setText(R.string.str_calibration0D5);
                     txt_calib_title.setTextColor(getResources().getColor(R.color.red));
-                    txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
+                    if(Show_temperature == 1)txt_calib_temperature.setText(getResources().getText(R.string.str_temperature).toString() + File_Save_Array[1][2] + getResources().getText(R.string.str_unit_tmpeC).toString() );
                     txt_calib_device_read.setText(getResources().getText(R.string.str_device_read).toString() + File_Save_Array[1][3]  );
                 }
 
