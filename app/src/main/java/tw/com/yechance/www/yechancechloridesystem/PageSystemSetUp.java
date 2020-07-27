@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PageSystemSetUp extends AppCompatActivity implements View.OnClickListener{
 
@@ -40,13 +41,14 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
     private String[][] File_Save_Array;
     private String[] File_Read_Row_Array;
 
-    private int List_Select_Point = 0, List_Select_Point1 = 0,List_Select_Point2 = 0,List_Select_Point3 = 0, First_Select_Point = 0,Last_Select_Point = 0;
+    private int List_Select_Point = 0, List_Select_Rev_Point = 0, List_Select_Point1 = 0,List_Select_Point2 = 0,List_Select_Point3 = 0, First_Select_Point = 0,Last_Select_Point = 0;
     private String Select_Function_Name = "";
     private DecimalFormat df = new DecimalFormat("##0.0000");
 
     private DecimalFormat df1 = new DecimalFormat("##0.0");
 
     private final ArrayList<String> LD_Datalist = new ArrayList<>();
+    private final ArrayList<String> Rev_LD_Datalist = new ArrayList<>();
 
     //取得內部儲存體擺放檔案的目錄
     //預設擺放目錄為 /data/data/[package.name]/file
@@ -133,8 +135,10 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
             File_Read_Row_Array = readFromFiletoArray(exDataFile);
             File_Save_Array = DataArrayfomat(File_Read_Row_Array);
         }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, LD_Datalist);
+        // 反转lists
+        Collections.reverse(Rev_LD_Datalist);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, LD_Datalist);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Rev_LD_Datalist);
         ave_ListView.setAdapter(adapter);
         ave_ListView.setOnItemClickListener(onClickListView);       //指定事件 Method
         //ave_TextView1.setText(LD_Datalist.get(0));
@@ -308,26 +312,30 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
             //Toast.makeText(MainActivity.this, "點選第 " + (position + 1) + " 個 \n內容：" + BT_Addrlist.get(position).toString(), Toast.LENGTH_SHORT).show();
 
             //if(ave_TextView1.getText().equals(getResources().getText(R.string.str_select_data)) && ave_TextView2.getText().equals(getResources().getText(R.string.str_select_data)) && ave_TextView3.getText().equals(getResources().getText(R.string.str_select_data))){
+            List_Select_Rev_Point = position;
+            List_Select_Point = LD_Datalist.size() - (List_Select_Rev_Point + 1);
+
+            //position >> List_Select_Point
             if(Last_Select_Point == 0){
-                  List_Select_Point = position;
-                  Select_Function_Name = File_Save_Array[position][0];
+                  //List_Select_Point = position;
+                  Select_Function_Name = File_Save_Array[List_Select_Point][0];
                   First_Select_Point = select_TV_Num;
             }
-            if(Select_Function_Name.equals(File_Save_Array[position][0]) || First_Select_Point == select_TV_Num){
+            if(Select_Function_Name.equals(File_Save_Array[List_Select_Point][0]) || First_Select_Point == select_TV_Num){
                 if(select_TV_Num == 1){
-                    ave_TextView1.setText(LD_Datalist.get(position));
-                    List_Select_Point1 = position;
-                    Last_Select_Point = position;
+                    ave_TextView1.setText(LD_Datalist.get(List_Select_Point));
+                    List_Select_Point1 = List_Select_Point;
+                    Last_Select_Point = List_Select_Point;
                 }
                 else if(select_TV_Num == 2){
-                    ave_TextView2.setText(LD_Datalist.get(position));
-                    List_Select_Point2 = position;
-                    Last_Select_Point = position;
+                    ave_TextView2.setText(LD_Datalist.get(List_Select_Point));
+                    List_Select_Point2 = List_Select_Point;
+                    Last_Select_Point = List_Select_Point;
                 }
                 else if(select_TV_Num == 3){
-                    ave_TextView3.setText(LD_Datalist.get(position));
-                    List_Select_Point3 = position;
-                    Last_Select_Point = position;
+                    ave_TextView3.setText(LD_Datalist.get(List_Select_Point));
+                    List_Select_Point3 = List_Select_Point;
+                    Last_Select_Point = List_Select_Point;
                 }
                 if(First_Select_Point != select_TV_Num)
                 {
@@ -476,6 +484,7 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
     private String[][] DataArrayfomat(String[] inArray)
     {
         LD_Datalist.clear();
+        Rev_LD_Datalist.clear();
         String[][] retrunArray = new String[inArray.length][6];
         for(int i=0; i<inArray.length;i++){
             String[] splitArray = inArray[i].split(",");
@@ -483,9 +492,11 @@ public class PageSystemSetUp extends AppCompatActivity implements View.OnClickLi
                 retrunArray[i][j] = splitArray[j];
             }
             LD_Datalist.add(retrunArray[i][0] + "："+ "\r\n" + retrunArray[i][1] );
+            Rev_LD_Datalist.add(retrunArray[i][0] + "："+ "\r\n" + retrunArray[i][1] );
         }
         if(retrunArray[0][0].equals("")){
             LD_Datalist.clear();
+            Rev_LD_Datalist.clear();
         }
         return retrunArray;
     }

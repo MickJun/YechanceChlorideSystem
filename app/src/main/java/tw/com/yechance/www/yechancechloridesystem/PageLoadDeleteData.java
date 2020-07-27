@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PageLoadDeleteData extends AppCompatActivity implements View.OnClickListener{
 
@@ -37,7 +38,9 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
     private String[] File_Read_Row_Array;
 
     private int List_Select_Point = 0;
+    private int List_Select_Rev_Point = 0;
     private final ArrayList<String> LD_Datalist = new ArrayList<>();
+    private final ArrayList<String> Rev_LD_Datalist = new ArrayList<>();
 
     //取得內部儲存體擺放檔案的目錄
     //預設擺放目錄為 /data/data/[package.name]/file
@@ -115,10 +118,15 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
             File_Save_Array = DataArrayfomat(File_Read_Row_Array);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, LD_Datalist);
+        // 反转lists
+        Collections.reverse(Rev_LD_Datalist);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, LD_Datalist);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, Rev_LD_Datalist);
         data_ListView.setAdapter(adapter);
         data_ListView.setOnItemClickListener(onClickListView);       //指定事件 Method
-        data_TextView.setText(LD_Datalist.get(0));
+//        data_TextView.setText(LD_Datalist.get(0));
+        data_TextView.setText(Rev_LD_Datalist.get(0));
+        List_Select_Point = LD_Datalist.size() - 1;
     }
 
     public void onClick(View v) {
@@ -195,8 +203,11 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             // Toast 快顯功能 第三個參數 Toast.LENGTH_SHORT 2秒  LENGTH_LONG 5秒
             //Toast.makeText(MainActivity.this, "點選第 " + (position + 1) + " 個 \n內容：" + BT_Addrlist.get(position).toString(), Toast.LENGTH_SHORT).show();
-            List_Select_Point = position;
-            data_TextView.setText(LD_Datalist.get(position));
+//            List_Select_Point = position;
+//            data_TextView.setText(LD_Datalist.get(position));
+            List_Select_Rev_Point = position;
+            List_Select_Point = LD_Datalist.size() - (List_Select_Rev_Point + 1);
+            data_TextView.setText(LD_Datalist.get(List_Select_Point));
         }
 
     };
@@ -334,6 +345,7 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
     private String[][] DataArrayfomat(String[] inArray)
     {
         LD_Datalist.clear();
+        Rev_LD_Datalist.clear();
         String[][] retrunArray = new String[inArray.length][6];
         for(int i=0; i<inArray.length;i++){
             String[] splitArray = inArray[i].split(",");
@@ -341,9 +353,11 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
                 retrunArray[i][j] = splitArray[j];
             }
             LD_Datalist.add(retrunArray[i][0] + "：" + "\r\n" + retrunArray[i][1] );
+            Rev_LD_Datalist.add(retrunArray[i][0] + "：" + "\r\n" + retrunArray[i][1] );
         }
         if(retrunArray[0][0].equals("")){
             LD_Datalist.clear();
+            Rev_LD_Datalist.clear();
         }
         return retrunArray;
     }
@@ -365,10 +379,15 @@ public class PageLoadDeleteData extends AppCompatActivity implements View.OnClic
         }
         else
         {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, LD_Datalist);
+            // 反转lists
+            Collections.reverse(Rev_LD_Datalist);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, LD_Datalist);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(PageLoadDeleteData.this, android.R.layout.simple_list_item_1, Rev_LD_Datalist);
             data_ListView.setAdapter(adapter);
             data_ListView.setOnItemClickListener(onClickListView);       //指定事件 Method
-            data_TextView.setText(LD_Datalist.get(0));
+//            data_TextView.setText(LD_Datalist.get(0));
+            data_TextView.setText(Rev_LD_Datalist.get(0));
+            List_Select_Point = LD_Datalist.size() - 1;
         }
     }
 
