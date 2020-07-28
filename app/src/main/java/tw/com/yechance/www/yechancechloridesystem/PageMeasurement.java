@@ -76,6 +76,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
             {"水溶液氯離子含量測定","2003年03月03日 33:33:33","3","33","333","3333"}
     };
 
+
     File exDataFile = null;
 
     File exSettingFile = null;
@@ -89,6 +90,18 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
 
     private SoundPool soundPool;
     private int alertId;
+
+    //Mick 20200727 add init value start
+    String initfilename = "init.txt";
+    String Initdata[][] = {{"Unitwater"},
+            {"543"}
+    };
+
+    File exinitFile = null;
+
+    private String[][] File_Init_Array;
+
+    //Mick 20200727 add init value end
 
     @Override
     public void onRestart() {
@@ -173,12 +186,22 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
         File_Read_Row_Array = readFromFiletoArray(exSettingFile);
         File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
         if(File_Setting_Array[0][0].equals("") || !File_Setting_Array[0][0].equals("temp0.1") ){
-            writeToFile(exDataFile, Settingdata,Settingdata.length,4);
-            File_Read_Row_Array = readFromFiletoArray(exDataFile);
+            writeToFile(exSettingFile, Settingdata,Settingdata.length,4);
+            File_Read_Row_Array = readFromFiletoArray(exSettingFile);
             File_Setting_Array = DataArrayfomat(File_Read_Row_Array);
         }
 
 
+        //Mick 20200727 add init value start
+        exinitFile = new File(dir, initfilename);
+        File_Read_Row_Array = readFromFiletoArray(exinitFile);
+        File_Init_Array = DataArrayfomat(File_Read_Row_Array);
+        if(File_Init_Array[0][0].equals("") || !File_Init_Array[0][0].equals("Unitwater") ){
+            writeToFile(exinitFile, Initdata,Initdata.length,1);
+            File_Read_Row_Array = readFromFiletoArray(exinitFile);
+            File_Init_Array = DataArrayfomat(File_Read_Row_Array);
+        }
+        //Mick 20200727 add init value end
 
 
 
@@ -210,6 +233,7 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
             txt_meas_title.setText(R.string.str_measurement_concrete_chloride);
             txt_meas_title.setTextColor(getResources().getColor(R.color.red));
             txt_meas_typing_title.setText(getResources().getText(R.string.str_water_unit));
+            edit_meas_typing.setText(File_Init_Array[1][0]);//Mick20200727 add init value
             txt_meas_typing_unit.setText(getResources().getText(R.string.str_unit_kgm3));
             //Str_for_Temp = getResources().getText(R.string.str_water_cl).toString();
             txt_meas_1.setText(getResources().getText(R.string.str_water_cl).toString() + getResources().getText(R.string.str_unit_percentage).toString());
@@ -302,6 +326,13 @@ public class PageMeasurement extends AppCompatActivity implements View.OnClickLi
                 File_Data_Array[File_Data_Array.length -1][5] = Get_Str_EndData;
 
                 writeToFile(exDataFile, File_Data_Array,File_Data_Array.length,6);
+
+                //Mick 20200727 add init value start
+                if(Get_title.equals("M_CC")) {
+                    File_Init_Array[1][0] = Get_Str_Keyin;
+                    writeToFile(exinitFile, File_Init_Array, File_Init_Array.length, 1);
+                }
+                //Mick 20200727 add init value end
                 Save_Flag = 1;
 
                 //print
